@@ -43,10 +43,12 @@ def run_randoop(benchmark_dir):
 			run_cmd(["./{}".format(cf)],os.path.abspath(base_dir))
 
 
-def main():
+def main():	
 	current_dir = os.path.dirname(os.path.abspath(__file__))
 	benchmark_dir = os.path.abspath(os.path.join(current_dir, "../corpus/benchmarks"))
-	#setup_randoop_scripts(benchmark_dir)
+	print("Generating Randoop scripts.")
+	setup_randoop_scripts(benchmark_dir)
+	print("Executing Randoop scripts.")
 	run_randoop(benchmark_dir)
 
 
