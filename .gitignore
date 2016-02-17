@@ -1,3 +1,5 @@
 # if you are on a mac.
 **/.DS_Store
 
+**/*.pyc
+
