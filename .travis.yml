@@ -13,4 +13,4 @@ python:
 install: "pip install --user -r requirements.txt"
 
 script:   
-    - echo "Hello World"
+    - ./run_all.sh
