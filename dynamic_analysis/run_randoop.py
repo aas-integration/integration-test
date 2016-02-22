@@ -9,6 +9,7 @@ def run_cmd(cmd, dir):
 	p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=dir)
 	try:
 		out, err = p.communicate(timeout=1200)
+		print (err)
 	except subprocess.TimeoutExpired as err:
 		print err
 
@@ -27,7 +28,7 @@ def setup_randoop(dir):
 	cmd.append("clean")
 	cmd.append("compile")
 
-	print cmd
+	print (" ".join(cmd))
 
 	run_cmd(cmd, dir)
 
