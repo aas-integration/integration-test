@@ -23,8 +23,12 @@ def run_randoop(javac_commands):
 			continue
 
 		out_dir_name = "__randoop_%04d" % (i)
-		if not os.path.exists(out_dir_name):
-			os.makedirs(out_dir_name)
+
+		if os.path.exists(out_dir_name):
+			shutil.rmtree(out_dir_name)
+
+		
+		os.makedirs(out_dir_name)
 
 		class_files_file_name = os.path.join(out_dir_name, 'class_files.txt')
 		print ("Creating list of files %d in %s." % (len(class_files), os.path.abspath(out_dir_name)) )
@@ -68,13 +72,13 @@ def run_randoop(javac_commands):
 
 		junit_cp = list(clean_cp)
 		junit_cp.append(junit_jar)
-		junit_build_cmd = ['javac', '-classpath', os.pathsep.join(junit_cp), os.path.join(out_dir_name, 'RandoopTest*.java'), '-d', out_dir_name]
+		junit_build_cmd = ['javac', '-classpath', os.pathsep.join(junit_cp), os.path.join(out_dir_name, '*.java'), '-d', out_dir_name]
 
 		junit_run_cp = list(junit_cp)
 		junit_run_cp.append(hamcrest_jar)
 		junit_run_cp.append(out_dir_name)
 
-		junit_run_cmd = ['java', '-classpath', os.pathsep.join(junit_run_cp), "org.junit.runner.JUnitCore", 'RandoopTest']
+		junit_run_cmd = ['java', '-classpath', os.pathsep.join(junit_run_cp), "org.junit.runner.JUnitCore", 'RegressionTest']
 
 		bash_script_name = "run_randoop_%04d.sh" % (i)
 		with open(bash_script_name, mode='w') as myfile:
@@ -107,10 +111,10 @@ def find_or_download_jars():
 	if not os.path.isdir(randoop_jar_dir):
 		os.makedirs(randoop_jar_dir)
 
-	randoop_jar = os.path.join(randoop_jar_dir, "randoop-2.0.jar")
+	randoop_jar = os.path.join(randoop_jar_dir, "randoop.jar")
 	if not os.path.isfile(randoop_jar):
 		print("Downloading randoop to %s" % randoop_jar )
-		urllib.urlretrieve ("https://github.com/randoop/randoop/releases/download/v2.0/randoop-2.0.jar", randoop_jar)
+		urllib.urlretrieve ("https://github.com/randoop/randoop/releases/download/v2.1.3/randoop-2.1.3.jar", randoop_jar)
 
 	junit_jar = os.path.join(randoop_jar_dir, "junit-4.12.jar")
 	if not os.path.isfile(junit_jar):
