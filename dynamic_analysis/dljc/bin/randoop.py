@@ -20,7 +20,6 @@ def run_randoop(javac_commands):
 		if os.path.exists(out_dir_name):
 			shutil.rmtree(out_dir_name)
 
-
 		os.makedirs(out_dir_name)
 
 		class_files_file_name = os.path.join(out_dir_name, 'class_files.txt')
@@ -60,7 +59,7 @@ def run_randoop(javac_commands):
 
 		randoop_cmd = ['java', '-ea', '-classpath', os.pathsep.join(clean_cp),
 		               "randoop.main.Main", "gentests", "--classlist=%s" % class_files_file_name,
-		               "--timelimit=1", "--silently-ignore-bad-class-names=true",
+		               "--timelimit=1", "--junit-reflection-allowed=false", "--silently-ignore-bad-class-names=true",
 		               "--junit-output-dir=%s" % out_dir_name]
 
 		junit_cp = list(clean_cp)
@@ -80,7 +79,7 @@ def run_randoop(javac_commands):
 		# daikon.Chicory's execution command
 		chicory_cmd = ['java', '-classpath',
 		               os.pathsep.join(chicory_run_cp), 'daikon.Chicory',
-		               '--daikon', 'RegressionTest']
+		               '--daikon', 'RegressionTestDriver']
 
 		junit_run_cp = list(junit_cp)
 		junit_run_cp.append(hamcrest_jar)
@@ -88,7 +87,7 @@ def run_randoop(javac_commands):
 
 		junit_run_cmd = ['java',
 		                 '-classpath', os.pathsep.join(junit_run_cp),
-		                 "org.junit.runner.JUnitCore", 'RegressionTest']
+		                 "org.junit.runner.JUnitCore", 'RegressionTestDriver']
 
 		bash_script_name = "run_randoop_%04d.sh" % i
 		with open(bash_script_name, mode='w') as myfile:
@@ -126,7 +125,7 @@ def find_or_download_jars():
 	randoop_jar = os.path.join(randoop_jar_dir, "randoop.jar")
 	if not os.path.isfile(randoop_jar):
 		print("Downloading randoop to %s" % randoop_jar)
-		urllib.urlretrieve ("https://github.com/randoop/randoop/releases/download/v2.1.3/randoop-2.1.3.jar", randoop_jar)
+		urllib.urlretrieve("https://github.com/randoop/randoop/releases/download/v2.1.3/randoop-2.1.3.jar", randoop_jar)
 
 	junit_jar = os.path.join(randoop_jar_dir, "junit-4.12.jar")
 	if not os.path.isfile(junit_jar):
