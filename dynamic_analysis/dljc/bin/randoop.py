@@ -127,7 +127,7 @@ def find_or_download_jars():
 	randoop_jar = os.path.join(randoop_jar_dir, "randoop.jar")
 	if not os.path.isfile(randoop_jar):
 		print("Downloading randoop to %s" % randoop_jar)
-		urllib.urlretrieve("https://github.com/randoop/randoop/releases/download/v2.1.3/randoop-2.1.3.jar", randoop_jar)
+		urllib.urlretrieve("https://github.com/randoop/randoop/releases/download/v2.1.4/randoop-2.1.4.jar", randoop_jar)
 
 	junit_jar = os.path.join(randoop_jar_dir, "junit-4.12.jar")
 	if not os.path.isfile(junit_jar):
