@@ -71,6 +71,8 @@ def run_randoop(javac_commands):
 		# setups daikon.Chicory's classpath (including jar component)
 		chicory_cp = list(clean_cp)
 		chicory_cp.append(daikon_jar)
+		chicory_cp.append(hamcrest_jar)
+		chicory_cp.append(out_dir_name)
 
 		# specifies output directory
 		chicory_run_cp = list(chicory_cp)
