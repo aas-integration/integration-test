@@ -8,12 +8,12 @@ JBX builds on top of the nix package manager, a tool for describing
 packages, which will always compile. There is a lot of reasons to use
 nix, here are a few:
 
-*   Purity, if a benchmark compiles once, it will again.
-*   Consistency, nix will force us to write our analyses, and the
+*   **Purity**, if a benchmark compiles once, it will again.
+*   **Consistency**, nix will force us to write our analyses, and the
     benchmarks in a consistent way.
-*   Modularity, when a analysis has been defined it will work on any of
+*   **Modularity**, when a analysis has been defined it will work on any of
     our growing base of benchmarks.
-*   Caching, all part results for analyses can be shared between
+*   **Caching**, all part results for analyses can be shared between
     analyses without rerunning and even between researching teams.
 
 ## Setting it up
@@ -26,12 +26,15 @@ git clone --recursive "https://github.com/ucla-pls/jbx"
 ```
 
 Setup vagrant on your computer: 
-1.  Download from [here](https://www.vagrantup.com/)
-2.  Install the `vagrant-nixos` plugin: 
-    ```sh
-    $ vagrant plugin install vagrant-nixos 
-    ``` 
-3.  Start vagrant (this might take some time):
+
+1. Download from [here](https://www.vagrantup.com/).
+
+2. Install the `vagrant-nixos` plugin: 
+   ```sh
+   $ vagrant plugin install vagrant-nixos 
+   ``` 
+
+3. Start vagrant (this might take some time):
     ```sh
     $ vagrant up
     $ vagrant ssh
@@ -54,8 +57,7 @@ array of tools that will do most of the tasks. All commands are
 prepended with `./jbx` and will call different scripts in the `helpers/`
 directory. The most useful is:
 
-`build`
-:   can build a benchmark, this is crucial in the development proccess.
+*   `build`: Can build a benchmark, this is crucial in the development proccess.
 
     This example builds avrora with java 6:
     
@@ -63,9 +65,7 @@ directory. The most useful is:
     $ ./jbx build --java 6 avrora
     ```
 
-`run`
-:   runs a dynamic analysis on a benchmark with some inputs.
-
+*   `run`: Run a dynamic analysis on a benchmark with some inputs.
     This example runs the emma reachable methods analysis
    
     ```sh
@@ -78,8 +78,7 @@ directory. The most useful is:
     $ ./jbx run avrora-harness -- small 
     ```
 
-`analyse`
-:   given an analysis and a benchmark, run the analysis on the
+*   `analyse`: Given an analysis and a benchmark, run the analysis on the
     benchmark.
 
     This example runs the `runAll` analysis on the avrora-harness
@@ -89,17 +88,16 @@ directory. The most useful is:
     $ ./jbx analysis --java 6 run.runAll avrora-harness
     ```
 
-`petablox`
-:   this is a tool directed solely agains petablox, because of all its
+*   `petablox`: This is a tool directed solely agains petablox, because of all its
     options. Some predefined analyses can be run with the `analyse` tool
     but petablox gives alot more flexablility:
 
-    ~~~sh
-    $ ./jbx petablox --reflect external \
-        -a cipa-0cfa-dlog \
-        -a cicg2dot-java \
+    ```sh
+    $ ./jbx petablox --reflect external \\
+        -a cipa-0cfa-dlog \\
+        -a cicg2dot-java \\
         fop=-harness
-    ~~~
+    ```
 
     Also we will be adding functionallity to export a petablox analysis
     to a logicblox database, running custom scripts, and droping
@@ -112,20 +110,20 @@ to convert corpus benchmarks into nix scripts, which can then be pushed
 to the *JBX* repository. 
 
 ```sh
-./jbx add-benchmark url
+$ ./jbx add-benchmark url
 ```
 Will output the corresponding nix script after performing the
 downloads and do-like-javac. We can then do the testing:
 
 ```sh
-./jbx add-benchmark --test url
+$ ./jbx add-benchmark --test url
 ```
 JBX will then test the nix script with an array of analyses ensuring
 that the builds and is well formed. After all tests are passes we can
 commit it to the *JBX* repository:
 
 ```sh
-./jbx add-benchmark --save url
+$ ./jbx add-benchmark --save url
 ```
 
 ## Exporting 
