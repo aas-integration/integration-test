@@ -1,4 +1,4 @@
-# Java Benchmark Expression
+# Java Benchmark Expressions
 
 Because of the complex nature of nix, there is not a run.sh file in this
 directory. On the other hand this will be a semi-short introduction to
@@ -93,10 +93,10 @@ directory. The most useful is:
     but petablox gives alot more flexablility:
 
     ```sh
-    $ ./jbx petablox --reflect external \\
-        -a cipa-0cfa-dlog \\
-        -a cicg2dot-java \\
-        fop=-harness
+    $ ./jbx petablox --reflect external \
+        -a cipa-0cfa-dlog \
+        -a cicg2dot-java \
+        fop-harness
     ```
 
     Also we will be adding functionallity to export a petablox analysis
