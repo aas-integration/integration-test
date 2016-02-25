@@ -91,9 +91,36 @@ def run_randoop(javac_commands):
 		                 '-classpath', os.pathsep.join(junit_run_cp),
 		                 "org.junit.runner.JUnitCore", 'RegressionTestDriver']
 
+		# thx to http://unix.stackexchange.com/questions/43340/how-to-introduce-timeout-for-shell-scripting
+		time_out_function = '''
+################################################################################
+# Executes command with a timeout
+# Params:
+#   $1 timeout in seconds
+#   $2 command
+# Returns 1 if timed out 0 otherwise
+timeout() {
+
+   time=$1
+
+   # start the command in a sub-shell to avoid problem with pipes
+   # (spawn accepts one command)
+   command="/bin/sh -c \"$2\""
+
+   expect -c "set echo \"-noecho\"; set timeout $time; spawn -noecho $command; expect timeout { exit 1 } eof { exit 0 }"
+
+   if [ $? = 1 ] ; then
+        echo "Timeout after ${time} seconds"
+   fi
+
+}
+'''
+
 		bash_script_name = "run_randoop_%04d.sh" % i
 		with open(bash_script_name, mode='w') as myfile:
 			myfile.write("#!/bin/bash\n")
+			myfile.write(time_out_function)
+			myfile.write("\n\n")
 			myfile.write("echo \"Run Randoop\"\n")
 			myfile.write(" ".join(randoop_cmd))
 			myfile.write("\n")
@@ -104,7 +131,9 @@ def run_randoop(javac_commands):
 			myfile.write(" ".join(junit_run_cmd))
 			myfile.write("\n")
 			myfile.write("echo \"Run Daikon\"\n")
+			myfile.write("timeout 380 \"")
 			myfile.write(" ".join(chicory_cmd))
+			myfile.write("\"")
 			myfile.write("\n")
 		print ("Written script to %s" % bash_script_name)
 
