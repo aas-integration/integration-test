@@ -91,18 +91,10 @@ def run_randoop(javac_commands):
 		                 '-classpath', os.pathsep.join(junit_run_cp),
 		                 "org.junit.runner.JUnitCore", 'RegressionTestDriver']
 
-		# thx to http://unix.stackexchange.com/questions/43340/how-to-introduce-timeout-for-shell-scripting
-		time_out_function = '''
-
-[ -n "$TRAVIS" ] && while true; do echo "..."; sleep 60; done &
-
-'''
-
+		timeout = "(sleep 20; kill $$) & exec "
 		bash_script_name = "run_randoop_%04d.sh" % i
 		with open(bash_script_name, mode='w') as myfile:
 			myfile.write("#!/bin/bash\n")
-			myfile.write(time_out_function)
-			myfile.write("\n\n")
 			myfile.write("echo \"Run Randoop\"\n")
 			myfile.write(" ".join(randoop_cmd))
 			myfile.write("\n")
@@ -113,9 +105,9 @@ def run_randoop(javac_commands):
 			myfile.write(" ".join(junit_run_cmd))
 			myfile.write("\n")
 			myfile.write("echo \"Run Daikon\"\n")
+			myfile.write(timeout)
 			myfile.write(" ".join(chicory_cmd))
-			myfile.write("\n\n\n")
-			myfile.write("[ -n \"$TRAVIS\" ] && kill %1")
+			myfile.write("\n")
 		print ("Written script to %s" % bash_script_name)
 
 		i += 1
