@@ -1,9 +1,12 @@
-import os, sys, shutil, fnmatch
+import fnmatch
+import os
+
 import subprocess32 as subprocess
 
-#-cp ../petablox.jar -Dpetablox.reflect.kind=dynamic -Dpetablox.run.analyses=cipa-0cfa-dlog petablox.project.Boot
+
+# -cp ../petablox.jar -Dpetablox.reflect.kind=dynamic -Dpetablox.run.analyses=cipa-0cfa-dlog petablox.project.Boot
 def run_cmd(cmd, dir):
-	p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE, cwd=dir)
+	p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=dir)
 	try:
 		out, err = p.communicate(timeout=1200)
 		print (err)
@@ -32,19 +35,17 @@ def setup_randoop(dir):
 
 def setup_randoop_scripts(benchmark_dir):
 	for base_dir, between, file_name in os.walk(benchmark_dir):
-		for cf in fnmatch.filter(file_name, 'build.xml'):
+		for _ in fnmatch.filter(file_name, 'build.xml'):
 			setup_randoop(os.path.abspath(base_dir))
-			return
+
 
 def run_randoop(benchmark_dir):
 	for base_dir, between, file_name in os.walk(benchmark_dir):
 		for cf in fnmatch.filter(file_name, 'run_randoop_*'):
 			working_dir = os.path.abspath(base_dir)
 			print ("Running Randoop for {}".format(working_dir))
-			run_cmd(["chmod", "a+x", os.path.join(working_dir, cf)],os.path.abspath(base_dir))
-			print("Running ./{}".format(cf))
-			run_cmd(["./{}".format(cf)],os.path.abspath(base_dir))
-			return
+			run_cmd(["chmod", "a+x", os.path.join(working_dir, cf)], os.path.abspath(base_dir))
+			run_cmd(["./{}".format(cf)], os.path.abspath(base_dir))
 
 
 def main():	
