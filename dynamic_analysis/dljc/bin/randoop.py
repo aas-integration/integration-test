@@ -94,18 +94,7 @@ def run_randoop(javac_commands):
 		# thx to http://unix.stackexchange.com/questions/43340/how-to-introduce-timeout-for-shell-scripting
 		time_out_function = '''
 
-Timeout=90 # 3 minutes
-
-function timeout_monitor() {
-   sleep "$Timeout"
-   kill -TERM "$1"
-}
-
-# start the timeout monitor in
-# background and pass the PID:
-timeout_monitor "$$" &
-
-# actual executing commands are below
+[ -n "$TRAVIS" ] && while true; do echo "..."; sleep 60; done &
 
 '''
 
@@ -125,7 +114,8 @@ timeout_monitor "$$" &
 			myfile.write("\n")
 			myfile.write("echo \"Run Daikon\"\n")
 			myfile.write(" ".join(chicory_cmd))
-			myfile.write("\n")
+			myfile.write("\n\n\n")
+			myfile.write("[ -n \"$TRAVIS\" ] && kill %1")
 		print ("Written script to %s" % bash_script_name)
 
 		i += 1
