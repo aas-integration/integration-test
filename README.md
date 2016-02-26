@@ -25,3 +25,24 @@ Finally, we have a graph generation in:
 
 Results of all tools running can be found on Travis: 
 [![Click here to see the Results of the experiments on TravisCI](https://travis-ci.org/aas-integration/integration-test.svg?branch=master)](https://travis-ci.org/aas-integration/integration-test)
+
+# Obtaining LogicBlox
+
+LogicBlox is released every month. It is available for download at
+https://download.logicblox.com . To obtain a username and password for
+this website, please fill out the form at
+http://www.logicblox.com/learn/academic-license-request-form/ and
+indicate that you are a MUSE team member.
+
+LogicBlox offers Linux 64-bit as well as OSX distributions. If you
+problems installing LogicBlox, please contact
+muse-users@logicblox.com. You might want to be signed up for this
+group as well!
+
+Documentation is available at
+https://developer.logicblox.com/documentation/ . Depending on what you
+are most interested in, you want to check the reference manual or the
+admin manual.
+
+Just email martin.bravenboer@logicblox.com if you have any further
+questions.
