@@ -2,23 +2,19 @@
 
 CORPUS_DIR=../corpus/benchmarks
 
-if [ ! -d "checker-framework-inference" ]; then
-  echo "Downloading checker-framework"
-  git clone https://github.com/typetools/checker-framework-inference.git
-  cd checker-framework-inference
-  echo "Checking out fixed commit for reproducability."
-  git checkout c6692c7c6ae0d6dfc785257d2468c3a2908f39e0
-  export TRAVIS_BUILD_DIR=./
-  ./.travis-build.sh
-  cd ..
+if [ -d "generic-type-inference-solver" ]; then
+  (cd generic-type-inference-solver && git pull)
+else
+  git clone https://github.com/wmdietl/generic-type-inference-solver.git
 fi
 
-cd checker-framework-inference
-export TRAVIS_BUILD_DIR=./
+cd generic-type-inference-solver
+export TRAVIS_BUILD_DIR=`pwd`
+
 ./.travis-build.sh
 cd ..
 
 
 echo "Apply checker-framework-inference"
-#TODO: change prog2dfg to petablox
+
 

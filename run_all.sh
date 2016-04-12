@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Type Inference"
+cd type_inference
+./run.sh
+cd ..
 
 echo "Dynamic Analysis"
 cd dynamic_analysis
