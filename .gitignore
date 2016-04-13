@@ -3,3 +3,10 @@
 
 **/*.pyc
 
+type_inference/annotation-tools/
+type_inference/checker-framework-inference/
+type_inference/checker-framework/
+type_inference/dataflowexample
+type_inference/generic-type-inference-solver/
+type_inference/jsr308-langtools/
+
