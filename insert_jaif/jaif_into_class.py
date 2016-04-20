@@ -18,8 +18,6 @@ def find_or_download_tools():
 		with zipfile.ZipFile(annotation_tools_zip, "r") as z:
 			z.extractall(WORKING_DIR)
 		subprocess.call(['chmod', '-R', '+x', annotation_tools])
-	else:
-		print "Good"
 
 
 def run_command(cmd):
