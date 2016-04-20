@@ -11,4 +11,7 @@ type_inference/checker-framework/
 type_inference/dataflowexample
 type_inference/generic-type-inference-solver/
 type_inference/jsr308-langtools/
-
+type_inference/do-like-javac/
+corpus/annotated/
+corpus/**/logs/
+**/*.jaif
