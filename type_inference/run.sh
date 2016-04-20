@@ -22,6 +22,7 @@ export TRAVIS_BUILD_DIR=`pwd`
 
 ./.travis-build-without-test.sh
 rm -rf $CORPUS_DIR/annotated/
+#infer all examples in corpus
 for f in $CORPUS_DIR/*
 do
   if [ -d "$f" ]; then
