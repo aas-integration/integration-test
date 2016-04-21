@@ -1,4 +1,10 @@
 #!/bin/bash
+
+ROOT=$TRAVIS_BUILD_DIR/type_inference
+export JSR308=$ROOT
+export CLASSPATH=${CLASSPATH}:$JSR308/generic-type-inference-solver/bin
+export AFU=$JSR308/annotation-tools/annotation-file-utilities
+export PATH=${PATH}:$AFU/scripts
 CORPUS_DIR=../../corpus
 SCRIPT=$(readlink -f $0)
 MYDIRPATH=`dirname $SCRIPT`
@@ -21,6 +27,7 @@ cd generic-type-inference-solver
 export TRAVIS_BUILD_DIR=`pwd`
 
 ./.travis-build-without-test.sh
+
 rm -rf $CORPUS_DIR/annotated/
 #infer all examples in corpus
 for f in $CORPUS_DIR/*
