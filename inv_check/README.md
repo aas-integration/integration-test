@@ -1,5 +1,5 @@
-Script to run Daikon on a given Dtrace file and find all methods that establish a given invariant. Currently only a stub. Run
+Script to identify a subset of methods in the corpus whose signature meets certain properties. Currently only a stub. Run
 
-    python inv_check.py
+    python find_methods.py
 
 to execute a test.
