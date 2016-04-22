@@ -1,9 +1,24 @@
-import os,sys
+import os, sys, shutil
+import subprocess
+import traceback
+
 import inv_check
 import insert_jaif
+import ontology_to_daikon
 
 import backend
 
+
+WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
+daikon_jar = os.path.join(WORKING_DIR, "libs/daikon.jar")	
+
+
+def run_command(cmd):
+	print (" ".join(cmd))
+	try:
+		return subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+	except:
+		raise Exception('calling {cmd} failed\n{trace}'.format(cmd=' '.join(cmd),trace=traceback.format_exc()))
 
 
 def main():
@@ -35,13 +50,19 @@ def main():
 
 	"""
 
-	print "todo" #MARTIN S
+	ontology_invariant_file = "TODO_from_Howie.txt"
+	with open(ontology_invariant_file, 'w') as f:
+		f.write("TODO")
+	
+	invariant_name = "TODO_sorted_sequence"
+
+	daikon_pattern_java_file = ontology_to_daikon.create_daikon_invariant(ontology_invariant_file, invariant_name)
 
 	""" Search for methods that have a return type annotated with Sequence
 	and for which we can establish a sortedness invariant (may done by LB).
 
 	INPUT: dtrace file of project
-	   type_invariant that we want to check on the dtrace file.
+	       daikon_pattern_java_file that we want to check on the dtrace file.
 	
 	OUTPUT: list of ppt names that establish the invariant. Here a ppt 
 	is a Daikon program point, s.a. test01.TestClass01.sort(int[]):::EXIT
@@ -49,12 +70,21 @@ def main():
 	Note: this step translate the type_invariant into a Daikon 
 	template (which is a Java file).
 	"""
-	invariant_substring = "sorted by" #MARTIN S
-	corpus = ["TODO"]
+
+	pattern_class_name = invariant_name
+	pattern_class_dir = os.path.join(WORKING_DIR, "invClass")
+	if os.path.isdir(pattern_class_dir):
+		shutil.rmtree(pattern_class_dir)
+	os.mkdir(pattern_class_dir)
+
+	cmd = ["javac", "-g", "-classpath", daikon_jar, daikon_pattern_java_file, "-d", pattern_class_dir]
+	run_command(cmd)
+
+	corpus = ["TODO"] #TODO: @Tim, add the real corpus here
 
 	for project in corpus:
 		dtrace_file = backend.get_dtrace_file_for_project(project)
-		list_of_methods = inv_check.find_ppts_that_establish_inv(dtrace_file, invariant_substring)
+		list_of_methods = inv_check.find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name)
 
 	""" Expansion of dynamic analysis results .... 
 	Find a list of similar methods that are similar to the ones found above (list_of_methods).
@@ -99,6 +129,11 @@ def main():
 
 
 
+if not os.path.isfile(daikon_jar):
+	print "Downloading dependencies"
+	cmd = ["./fetch_dependencies.sh"]
+	run_command(cmd)
+	print "Done."
 
 if __name__ == '__main__':
 	main()

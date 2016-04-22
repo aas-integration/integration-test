@@ -24,6 +24,7 @@ def run_command(cmd):
 	except:
 		raise Exception('calling {cmd} failed\n{trace}'.format(cmd=' '.join(cmd),trace=traceback.format_exc()))
 
+
 def run_daikon_on_dtrace_file(dtrace_file, classpath=daikon_jar, checked_invariant=None):
 
 	cmd = ["java", "-classpath", classpath, "daikon.Daikon", dtrace_file]
@@ -35,7 +36,7 @@ def run_daikon_on_dtrace_file(dtrace_file, classpath=daikon_jar, checked_invaria
 
 
 
-def find_ppts_that_establish_inv(daikon_output, inv_substring):
+def find_ppts_that_establish_inv_in_daikon_output(daikon_output, inv_substring):
 	ppts_with_inv = []
 	start_of_new_block = False
 	current_method = None
@@ -55,12 +56,25 @@ def find_ppts_that_establish_inv(daikon_output, inv_substring):
 	return ppts_with_inv
 
 
+def find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name):
+	"""
+	This is the main method to be called from the outside.
+	INPUT: dtrace_file - for a given project
+	       pattern_class_name - the root class dir for the daikon pattern that needs to be added to the CP when running daikon
+	       pattern_class_name - qualified name of the pattern class
+	OUTPUT: set of daikon program points (ppts) that establish the given invariant. 
+	"""
+	daikon_output = run_daikon_on_dtrace_file(dtrace_file, daikon_jar+":"+pattern_class_dir, pattern_class_name)
+	ppts = find_ppts_that_establish_inv_in_daikon_output(daikon_output, pattern_class_name)
+	return ppts
+
+
 def test():	
 	test_dtrace = os.path.join(WORKING_DIR, "test.dtrace.gz")
 	output = run_daikon_on_dtrace_file(test_dtrace, checked_invariant="daikon.inv.unary.sequence.EltwiseIntLessThan")
 	print output
 
-	ppts = find_ppts_that_establish_inv(output, " sorted by ")
+	ppts = find_ppts_that_establish_inv_in_daikon_output(output, " sorted by ")
 	print ("Methods that establish \"sorted by\":")
 	for ppt in ppts:
 		print ppt

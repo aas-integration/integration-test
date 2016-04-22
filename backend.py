@@ -1,5 +1,9 @@
 import sys, os
 
+WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
+
+
+
 def add_project_to_corpus(project_dir):
 	""" Assumes that the project_dir contains a 
 	text file named TODO.TODO that contains the build command(s) for the 
@@ -48,6 +52,8 @@ def find_methods_with_property(property):
 
 
 def get_dtrace_file_for_project(project):
+	if project == "TODO":
+		return os.path.join(WORKING_DIR, "inv_check/test.dtrace.gz")
 	return "TODO"
 
 

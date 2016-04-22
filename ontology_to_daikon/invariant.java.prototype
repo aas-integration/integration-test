@@ -1,0 +1,44 @@
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
+import daikon.inv.binary.sequenceScalar.SequenceScalar;
+import daikon.inv.unary.sequence.SingleScalarSequence;
+
+public class $INVARIANT_NAME$ extends SingleScalarSequence {
+
+  private static $INVARIANT_NAME$ proto = new $INVARIANT_NAME$ ();
+
+  public static $INVARIANT_NAME$ get_proto() {
+    return (proto);
+  }
+
+	@Override
+	public InvariantStatus add_modified(long[] a, int count) {
+		return check_modified(a, count);
+	}
+
+	@Override
+	public InvariantStatus check_modified(long[] a, int count) {
+		for (int i=1; i<a.length; i++) {
+			if (!((a[i-1]) < ( a[i]))) {
+				return InvariantStatus.FALSIFIED;
+			}
+		}
+	    return InvariantStatus.NO_CHANGE;
+	}
+
+	public boolean enabled() {
+	return true;
+	}	
+
+	@Override
+	protected double computeConfidence() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String format_using(OutputFormat arg0) {
+		return "$INVARIANT_NAME$ " + var().name();
+	}
+
+}
