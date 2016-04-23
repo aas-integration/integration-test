@@ -1,3 +1,7 @@
+
+import daikon.PptSlice;
+
+import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.sequenceScalar.SequenceScalar;
@@ -5,40 +9,59 @@ import daikon.inv.unary.sequence.SingleScalarSequence;
 
 public class $INVARIANT_NAME$ extends SingleScalarSequence {
 
+  protected $INVARIANT_NAME$(PptSlice ppt) {
+    super(ppt);
+  }
+
+  protected $INVARIANT_NAME$() {
+    super();
+  }
+
+
   private static $INVARIANT_NAME$ proto = new $INVARIANT_NAME$ ();
 
   public static $INVARIANT_NAME$ get_proto() {
     return (proto);
   }
 
-	@Override
-	public InvariantStatus add_modified(long[] a, int count) {
-		return check_modified(a, count);
-	}
+  @Override
+  protected $INVARIANT_NAME$ instantiate_dyn (PptSlice slice) {
+    return new $INVARIANT_NAME$(slice);
+  }
 
-	@Override
-	public InvariantStatus check_modified(long[] a, int count) {
-		for (int i=1; i<a.length; i++) {
-			if (!((a[i-1]) < ( a[i]))) {
-				return InvariantStatus.FALSIFIED;
-			}
-		}
-	    return InvariantStatus.NO_CHANGE;
-	}
+  @Override
+  public InvariantStatus add_modified(long[] a, int count) {
+    return check_modified(a, count);
+  }
 
-	public boolean enabled() {
-	return true;
-	}	
+  @Override
+  public InvariantStatus check_modified(long[] a, int count) {
+    for (int i=1; i<a.length; i++) {
+      if (!((a[i-1]) < ( a[i]))) {
+        return InvariantStatus.FALSIFIED;
+      }
+    }
+      return InvariantStatus.NO_CHANGE;
+  }
 
-	@Override
-	protected double computeConfidence() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+  public boolean enabled() {
+  return true;
+  } 
 
-	@Override
-	public String format_using(OutputFormat arg0) {
-		return "$INVARIANT_NAME$ " + var().name();
-	}
+  @Override
+  protected double computeConfidence() {
+    return 1;
+  }
+
+  @Override
+  public String format_using(OutputFormat arg0) {
+    return "$INVARIANT_NAME$ " + var().name();
+  }
+
+  @Override
+  public boolean isSameFormula(Invariant other) {
+    return (other instanceof $INVARIANT_NAME$);
+  }
+
 
 }

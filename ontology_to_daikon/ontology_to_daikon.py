@@ -4,8 +4,6 @@ import subprocess
 import traceback
 import urllib
 
-
-
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 
 def create_daikon_invariant(ontology_invariant_file, invariant_name):
