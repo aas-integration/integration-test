@@ -2,7 +2,8 @@ import os, subprocess, traceback, sys
 from contextlib import contextmanager
 
 def run_cmd(cmd, print_output=False):
-  print ("Running %s" % cmd)
+  if print_output:
+    print ("Running %s" % cmd)
   try:
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if print_output:

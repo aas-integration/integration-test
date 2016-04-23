@@ -71,14 +71,21 @@ def get_dtrace_file_for_project(project):
   if project == "TODO":
     return os.path.join(WORKING_DIR, "inv_check/test.dtrace.gz")
 
-  dtrace_path = os.path.join(corpus_dir, project_dir, dljc_output_dir, "RegressionTestDriver.dtrace.gz")
+  dtrace_path = os.path.join(corpus_dir, project, dljc_output_dir, "RegressionTestDriver.dtrace.gz")
   if os.path.exists(dtrace_path):
     return dtrace_path
   else:
     return None
 
 def main():
-  pass
+  for dir in os.listdir(corpus_dir):
+    project_dir = get_project_dir(dir)
+    if os.path.isdir(project_dir):
+      print "Analyzing {}".format(dir)
+      add_project_to_corpus(project_dir)
+      dtrace = get_dtrace_file_for_project(dir)
+      if dtrace:
+        print "Generated {}".format(dtrace)
 
 if __name__ == '__main__':
   main()
