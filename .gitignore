@@ -3,10 +3,18 @@
 
 **/*.pyc
 
+libs/*
+do-like-javac
+
+dynamic_analysis/dljc/bin/__randoop_files/
+
 type_inference/annotation-tools/
 type_inference/checker-framework-inference/
 type_inference/checker-framework/
 type_inference/dataflowexample
 type_inference/generic-type-inference-solver/
 type_inference/jsr308-langtools/
-
+type_inference/do-like-javac/
+corpus/annotated/
+corpus/**/logs/
+**/*.jaif

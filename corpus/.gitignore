@@ -1,0 +1,24 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+classes/*
+test-src/*
+test-classes/*
+*.dtrace.gz
+*.inv.gz
+dljc-out
+test-src*
+test-classes*
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# if you are on a mac.
+**/.DS_Store
