@@ -1,0 +1,2196 @@
+Google Java Style
+
+Last changed: March 21, 2014
+
+1 Introduction
+1.1 Terminology notes
+1.2 Guide notes
+
+2 Source file basics
+2.1 File name
+2.2 File encoding: UTF-8
+2.3 Special characters
+2.3.1 Whitespace characters
+2.3.2 Special escape sequences
+2.3.3 Non-ASCII characters
+
+3 Source file structure
+3.1 License or copyright information, if present
+3.2 Package statement
+3.3 Import statements
+3.3.1 No wildcard imports
+3.3.2 No line-wrapping
+3.3.3 Ordering and spacing
+3.4 Class declaration
+3.4.1 Exactly one top-level class declaration
+3.4.2 Class member ordering
+
+4 Formatting
+4.1 Braces
+4.1.1 Braces are used where optional
+4.1.2 Nonempty blocks: K & R style
+4.1.3 Empty blocks: may be concise
+4.2 Block indentation: +2 spaces
+4.3 One statement per line
+4.4 Column limit: 80 or 100
+4.5 Line-wrapping
+4.5.1 Where to break
+4.5.2 Indent continuation lines at least +4 spaces
+4.6 Whitespace
+4.6.1 Vertical Whitespace
+4.6.2 Horizontal whitespace
+4.6.3 Horizontal alignment: never required
+4.7 Grouping parentheses: recommended
+4.8 Specific constructs
+4.8.1 Enum classes
+4.8.2 Variable declarations
+4.8.3 Arrays
+4.8.4 Switch statements
+4.8.5 Annotations
+4.8.6 Comments
+4.8.7 Modifiers
+4.8.8 Numeric Literals
+
+5 Naming
+5.1 Rules common to all identifiers
+5.2 Rules by identifier type
+5.2.1 Package names
+5.2.2 Class names
+5.2.3 Method names
+5.2.4 Constant names
+5.2.5 Non-constant field names
+5.2.6 Parameter names
+5.2.7 Local variable names
+5.2.8 Type variable names
+5.3 Camel case: defined
+
+6 Programming Practices
+6.1 @Override: always used
+6.2 Caught exceptions: not ignored
+6.3 Static members: qualified using class
+6.4 Finalizers: not used
+
+7 Javadoc
+7.1 Formatting
+7.1.1 General form
+7.1.2 Paragraphs
+7.1.3 At-clauses
+7.2 The summary fragment
+7.3 Where Javadoc is used
+7.3.1 Exception: self-explanatory methods
+7.3.2 Exception: overrides
+1 Introduction
+
+This document serves as the complete definition of Google's coding standards for source code in the Java™ Programming Language. A Java source file is described as being in Google Style if and only if it adheres to the rules herein.
+
+Like other programming style guides, the issues covered span not only aesthetic issues of formatting, but other types of conventions or coding standards as well. However, this document focuses primarily on the hard-and-fast rules that we follow universally, and avoids giving advice that isn't clearly enforceable (whether by human or tool).
+
+1.1 Terminology notes
+
+In this document, unless otherwise clarified:
+
+The term class is used inclusively to mean an "ordinary" class, enum class, interface or annotation type (@interface).
+The term comment always refers to implementation comments. We do not use the phrase "documentation comments", instead using the common term "Javadoc."
+Other "terminology notes" will appear occasionally throughout the document.
+
+1.2 Guide notes
+
+Example code in this document is non-normative. That is, while the examples are in Google Style, they may not illustrate the only stylish way to represent the code. Optional formatting choices made in examples should not be enforced as rules.
+
+2 Source file basics
+
+2.1 File name
+
+The source file name consists of the case-sensitive name of the top-level class it contains, plus the .java extension.
+
+2.2 File encoding: UTF-8
+
+Source files are encoded in UTF-8.
+
+2.3 Special characters
+
+2.3.1 Whitespace characters
+
+Aside from the line terminator sequence, the ASCII horizontal space character (0x20) is the only whitespace character that appears anywhere in a source file. This implies that:
+
+All other whitespace characters in string and character literals are escaped.
+Tab characters are not used for indentation.
+2.3.2 Special escape sequences
+
+For any character that has a special escape sequence (\b, \t, \n, \f, \r, \", \' and \\), that sequence is used rather than the corresponding octal (e.g. \012) or Unicode (e.g. \u000a) escape.
+
+2.3.3 Non-ASCII characters
+
+For the remaining non-ASCII characters, either the actual Unicode character (e.g. ∞) or the equivalent Unicode escape (e.g. \u221e) is used, depending only on which makes the code easier to read and understand.
+
+Tip: In the Unicode escape case, and occasionally even when actual Unicode characters are used, an explanatory comment can be very helpful.
+
+Examples:
+
+Example	Discussion
+String unitAbbrev = "μs";	Best: perfectly clear even without a comment.
+String unitAbbrev = "\u03bcs"; // "μs"	Allowed, but there's no reason to do this.
+String unitAbbrev = "\u03bcs"; // Greek letter mu, "s"	Allowed, but awkward and prone to mistakes.
+String unitAbbrev = "\u03bcs";	Poor: the reader has no idea what this is.
+return '\ufeff' + content; // byte order mark	Good: use escapes for non-printable characters, and comment if necessary.
+Tip: Never make your code less readable simply out of fear that some programs might not handle non-ASCII characters properly. If that should happen, those programs are broken and they must be fixed.
+
+3 Source file structure
+
+A source file consists of, in order:
+
+License or copyright information, if present
+Package statement
+Import statements
+Exactly one top-level class
+Exactly one blank line separates each section that is present.
+
+3.1 License or copyright information, if present
+
+If license or copyright information belongs in a file, it belongs here.
+
+3.2 Package statement
+
+The package statement is not line-wrapped. The column limit (Section 4.4, Column limit: 80 or 100) does not apply to package statements.
+
+3.3 Import statements
+
+3.3.1 No wildcard imports
+
+Wildcard imports, static or otherwise, are not used.
+
+3.3.2 No line-wrapping
+
+Import statements are not line-wrapped. The column limit (Section 4.4, Column limit: 80 or 100) does not apply to import statements.
+
+3.3.3 Ordering and spacing
+
+Import statements are divided into the following groups, in this order, with each group separated by a single blank line:
+
+All static imports in a single group
+com.google imports (only if this source file is in the com.google package space)
+Third-party imports, one group per top-level package, in ASCII sort order
+for example: android, com, junit, org, sun
+java imports
+javax imports
+Within a group there are no blank lines, and the imported names appear in ASCII sort order. (Note: this is not the same as the import statements being in ASCII sort order; the presence of semicolons warps the result.)
+
+3.4 Class declaration
+
+3.4.1 Exactly one top-level class declaration
+
+Each top-level class resides in a source file of its own.
+
+3.4.2 Class member ordering
+
+The ordering of the members of a class can have a great effect on learnability, but there is no single correct recipe for how to do it. Different classes may order their members differently.
+
+What is important is that each class order its members in some logical order, which its maintainer could explain if asked. For example, new methods are not just habitually added to the end of the class, as that would yield "chronological by date added" ordering, which is not a logical ordering.
+
+3.4.2.1 Overloads: never split
+
+When a class has multiple constructors, or multiple methods with the same name, these appear sequentially, with no intervening members.
+
+4 Formatting
+
+Terminology Note: block-like construct refers to the body of a class, method or constructor. Note that, by Section 4.8.3.1 on array initializers, any array initializer may optionally be treated as if it were a block-like construct.
+
+4.1 Braces
+
+4.1.1 Braces are used where optional
+
+Braces are used with if, else, for, do and while statements, even when the body is empty or contains only a single statement.
+
+4.1.2 Nonempty blocks: K & R style
+
+Braces follow the Kernighan and Ritchie style ("Egyptian brackets") for nonempty blocks and block-like constructs:
+
+No line break before the opening brace.
+Line break after the opening brace.
+Line break before the closing brace.
+Line break after the closing brace if that brace terminates a statement or the body of a method, constructor or named class. For example, there is no line break after the brace if it is followed by else or a comma.
+Example:
+
+return new MyClass() {
+  @Override public void method() {
+    if (condition()) {
+      try {
+        something();
+      } catch (ProblemException e) {
+        recover();
+      }
+    }
+  }
+};
+A few exceptions for enum classes are given in Section 4.8.1, Enum classes.
+
+4.1.3 Empty blocks: may be concise
+
+An empty block or block-like construct may be closed immediately after it is opened, with no characters or line break in between ({}), unless it is part of a multi-block statement (one that directly contains multiple blocks: if/else-if/else or try/catch/finally).
+
+Example:
+
+  void doNothing() {}
+4.2 Block indentation: +2 spaces
+
+Each time a new block or block-like construct is opened, the indent increases by two spaces. When the block ends, the indent returns to the previous indent level. The indent level applies to both code and comments throughout the block. (See the example in Section 4.1.2, Nonempty blocks: K & R Style.)
+
+4.3 One statement per line
+
+Each statement is followed by a line-break.
+
+4.4 Column limit: 80 or 100
+
+Projects are free to choose a column limit of either 80 or 100 characters. Except as noted below, any line that would exceed this limit must be line-wrapped, as explained in Section 4.5, Line-wrapping.
+
+Exceptions:
+
+Lines where obeying the column limit is not possible (for example, a long URL in Javadoc, or a long JSNI method reference).
+package and import statements (see Sections 3.2 Package statement and 3.3 Import statements).
+Command lines in a comment that may be cut-and-pasted into a shell.
+4.5 Line-wrapping
+
+Terminology Note: When code that might otherwise legally occupy a single line is divided into multiple lines, typically to avoid overflowing the column limit, this activity is called line-wrapping.
+
+There is no comprehensive, deterministic formula showing exactly how to line-wrap in every situation. Very often there are several valid ways to line-wrap the same piece of code.
+
+Tip: Extracting a method or local variable may solve the problem without the need to line-wrap.
+
+4.5.1 Where to break
+
+The prime directive of line-wrapping is: prefer to break at a higher syntactic level. Also:
+
+When a line is broken at a non-assignment operator the break comes before the symbol. (Note that this is not the same practice used in Google style for other languages, such as C++ and JavaScript.)
+This also applies to the following "operator-like" symbols: the dot separator (.), the ampersand in type bounds (<T extends Foo & Bar>), and the pipe in catch blocks (catch (FooException | BarException e)).
+When a line is broken at an assignment operator the break typically comes after the symbol, but either way is acceptable.
+This also applies to the "assignment-operator-like" colon in an enhanced for ("foreach") statement.
+A method or constructor name stays attached to the open parenthesis (() that follows it.
+A comma (,) stays attached to the token that precedes it.
+4.5.2 Indent continuation lines at least +4 spaces
+
+When line-wrapping, each line after the first (each continuation line) is indented at least +4 from the original line.
+
+When there are multiple continuation lines, indentation may be varied beyond +4 as desired. In general, two continuation lines use the same indentation level if and only if they begin with syntactically parallel elements.
+
+Section 4.6.3 on Horizontal alignment addresses the discouraged practice of using a variable number of spaces to align certain tokens with previous lines.
+
+4.6 Whitespace
+
+4.6.1 Vertical Whitespace
+
+A single blank line appears:
+
+Between consecutive members (or initializers) of a class: fields, constructors, methods, nested classes, static initializers, instance initializers.
+Exception: A blank line between two consecutive fields (having no other code between them) is optional. Such blank lines are used as needed to create logical groupings of fields.
+Within method bodies, as needed to create logical groupings of statements.
+Optionally before the first member or after the last member of the class (neither encouraged nor discouraged).
+As required by other sections of this document (such as Section 3.3, Import statements).
+Multiple consecutive blank lines are permitted, but never required (or encouraged).
+
+4.6.2 Horizontal whitespace
+
+Beyond where required by the language or other style rules, and apart from literals, comments and Javadoc, a single ASCII space also appears in the following places only.
+
+Separating any reserved word, such as if, for or catch, from an open parenthesis (() that follows it on that line
+Separating any reserved word, such as else or catch, from a closing curly brace (}) that precedes it on that line
+Before any open curly brace ({), with two exceptions:
+@SomeAnnotation({a, b}) (no space is used)
+String[][] x = {{"foo"}}; (no space is required between {{, by item 8 below)
+On both sides of any binary or ternary operator. This also applies to the following "operator-like" symbols:
+the ampersand in a conjunctive type bound: <T extends Foo & Bar>
+the pipe for a catch block that handles multiple exceptions: catch (FooException | BarException e)
+the colon (:) in an enhanced for ("foreach") statement
+After ,:; or the closing parenthesis ()) of a cast
+On both sides of the double slash (//) that begins an end-of-line comment. Here, multiple spaces are allowed, but not required.
+Between the type and variable of a declaration: List<String> list
+Optional just inside both braces of an array initializer
+new int[] {5, 6} and new int[] { 5, 6 } are both valid
+Note: This rule never requires or forbids additional space at the start or end of a line, only interior space.
+
+4.6.3 Horizontal alignment: never required
+
+Terminology Note: Horizontal alignment is the practice of adding a variable number of additional spaces in your code with the goal of making certain tokens appear directly below certain other tokens on previous lines.
+
+This practice is permitted, but is never required by Google Style. It is not even required to maintain horizontal alignment in places where it was already used.
+
+Here is an example without alignment, then using alignment:
+
+private int x; // this is fine
+private Color color; // this too
+
+private int   x;      // permitted, but future edits
+private Color color;  // may leave it unaligned
+Tip: Alignment can aid readability, but it creates problems for future maintenance. Consider a future change that needs to touch just one line. This change may leave the formerly-pleasing formatting mangled, and that is allowed. More often it prompts the coder (perhaps you) to adjust whitespace on nearby lines as well, possibly triggering a cascading series of reformattings. That one-line change now has a "blast radius." This can at worst result in pointless busywork, but at best it still corrupts version history information, slows down reviewers and exacerbates merge conflicts.
+
+4.7 Grouping parentheses: recommended
+
+Optional grouping parentheses are omitted only when author and reviewer agree that there is no reasonable chance the code will be misinterpreted without them, nor would they have made the code easier to read. It is not reasonable to assume that every reader has the entire Java operator precedence table memorized.
+
+4.8 Specific constructs
+
+4.8.1 Enum classes
+
+After each comma that follows an enum constant, a line-break is optional.
+
+An enum class with no methods and no documentation on its constants may optionally be formatted as if it were an array initializer (see Section 4.8.3.1 on array initializers).
+
+private enum Suit { CLUBS, HEARTS, SPADES, DIAMONDS }
+Since enum classes are classes, all other rules for formatting classes apply.
+
+4.8.2 Variable declarations
+
+4.8.2.1 One variable per declaration
+
+Every variable declaration (field or local) declares only one variable: declarations such as int a, b; are not used.
+
+4.8.2.2 Declared when needed, initialized as soon as possible
+
+Local variables are not habitually declared at the start of their containing block or block-like construct. Instead, local variables are declared close to the point they are first used (within reason), to minimize their scope. Local variable declarations typically have initializers, or are initialized immediately after declaration.
+
+4.8.3 Arrays
+
+4.8.3.1 Array initializers: can be "block-like"
+
+Any array initializer may optionally be formatted as if it were a "block-like construct." For example, the following are all valid (not an exhaustive list):
+
+new int[] {           new int[] {
+  0, 1, 2, 3            0,
+}                       1,
+                        2,
+new int[] {             3,
+  0, 1,               }
+  2, 3
+}                     new int[]
+                          {0, 1, 2, 3}
+4.8.3.2 No C-style array declarations
+
+The square brackets form a part of the type, not the variable: String[] args, not String args[].
+
+4.8.4 Switch statements
+
+Terminology Note: Inside the braces of a switch block are one or more statement groups. Each statement group consists of one or more switch labels (either case FOO: or default:), followed by one or more statements.
+
+4.8.4.1 Indentation
+
+As with any other block, the contents of a switch block are indented +2.
+
+After a switch label, a newline appears, and the indentation level is increased +2, exactly as if a block were being opened. The following switch label returns to the previous indentation level, as if a block had been closed.
+
+4.8.4.2 Fall-through: commented
+
+Within a switch block, each statement group either terminates abruptly (with a break, continue, return or thrown exception), or is marked with a comment to indicate that execution will or might continue into the next statement group. Any comment that communicates the idea of fall-through is sufficient (typically // fall through). This special comment is not required in the last statement group of the switch block. Example:
+
+switch (input) {
+  case 1:
+  case 2:
+    prepareOneOrTwo();
+    // fall through
+  case 3:
+    handleOneTwoOrThree();
+    break;
+  default:
+    handleLargeNumber(input);
+}
+4.8.4.3 The default case is present
+
+Each switch statement includes a default statement group, even if it contains no code.
+
+4.8.5 Annotations
+
+Annotations applying to a class, method or constructor appear immediately after the documentation block, and each annotation is listed on a line of its own (that is, one annotation per line). These line breaks do not constitute line-wrapping (Section 4.5, Line-wrapping), so the indentation level is not increased. Example:
+
+@Override
+@Nullable
+public String getNameIfPresent() { ... }
+Exception: A single parameterless annotation may instead appear together with the first line of the signature, for example:
+
+@Override public int hashCode() { ... }
+Annotations applying to a field also appear immediately after the documentation block, but in this case, multiple annotations (possibly parameterized) may be listed on the same line; for example:
+
+@Partial @Mock DataLoader loader;
+There are no specific rules for formatting parameter and local variable annotations.
+
+4.8.6 Comments
+
+4.8.6.1 Block comment style
+
+Block comments are indented at the same level as the surrounding code. They may be in /* ... */ style or // ... style. For multi-line /* ... */ comments, subsequent lines must start with * aligned with the * on the previous line.
+
+/*
+ * This is          // And so           /* Or you can
+ * okay.            // is this.          * even do this. */
+ */
+Comments are not enclosed in boxes drawn with asterisks or other characters.
+
+Tip: When writing multi-line comments, use the /* ... */ style if you want automatic code formatters to re-wrap the lines when necessary (paragraph-style). Most formatters don't re-wrap lines in // ... style comment blocks.
+
+4.8.7 Modifiers
+
+Class and member modifiers, when present, appear in the order recommended by the Java Language Specification:
+
+public protected private abstract static final transient volatile synchronized native strictfp
+4.8.8 Numeric Literals
+
+long-valued integer literals use an uppercase L suffix, never lowercase (to avoid confusion with the digit 1). For example, 3000000000L rather than 3000000000l.
+
+5 Naming
+
+5.1 Rules common to all identifiers
+
+Identifiers use only ASCII letters and digits, and in two cases noted below, underscores. Thus each valid identifier name is matched by the regular expression \w+ .
+
+In Google Style special prefixes or suffixes, like those seen in the examples name_, mName, s_name and kName, are not used.
+
+5.2 Rules by identifier type
+
+5.2.1 Package names
+
+Package names are all lowercase, with consecutive words simply concatenated together (no underscores). For example, com.example.deepspace, not com.example.deepSpace or com.example.deep_space.
+
+5.2.2 Class names
+
+Class names are written in UpperCamelCase.
+
+Class names are typically nouns or noun phrases. For example, Character or ImmutableList. Interface names may also be nouns or noun phrases (for example, List), but may sometimes be adjectives or adjective phrases instead (for example, Readable).
+
+There are no specific rules or even well-established conventions for naming annotation types.
+
+Test classes are named starting with the name of the class they are testing, and ending with Test. For example, HashTest or HashIntegrationTest.
+
+5.2.3 Method names
+
+Method names are written in lowerCamelCase.
+
+Method names are typically verbs or verb phrases. For example, sendMessage or stop.
+
+Underscores may appear in JUnit test method names to separate logical components of the name. One typical pattern is test<MethodUnderTest>_<state>, for example testPop_emptyStack. There is no One Correct Way to name test methods.
+
+5.2.4 Constant names
+
+Constant names use CONSTANT_CASE: all uppercase letters, with words separated by underscores. But what is a constant, exactly?
+
+Every constant is a static final field, but not all static final fields are constants. Before choosing constant case, consider whether the field really feels like a constant. For example, if any of that instance's observable state can change, it is almost certainly not a constant. Merely intending to never mutate the object is generally not enough. Examples:
+
+// Constants
+static final int NUMBER = 5;
+static final ImmutableList<String> NAMES = ImmutableList.of("Ed", "Ann");
+static final Joiner COMMA_JOINER = Joiner.on(',');  // because Joiner is immutable
+static final SomeMutableType[] EMPTY_ARRAY = {};
+enum SomeEnum { ENUM_CONSTANT }
+
+// Not constants
+static String nonFinal = "non-final";
+final String nonStatic = "non-static";
+static final Set<String> mutableCollection = new HashSet<String>();
+static final ImmutableSet<SomeMutableType> mutableElements = ImmutableSet.of(mutable);
+static final Logger logger = Logger.getLogger(MyClass.getName());
+static final String[] nonEmptyArray = {"these", "can", "change"};
+These names are typically nouns or noun phrases.
+
+5.2.5 Non-constant field names
+
+Non-constant field names (static or otherwise) are written in lowerCamelCase.
+
+These names are typically nouns or noun phrases. For example, computedValues or index.
+
+5.2.6 Parameter names
+
+Parameter names are written in lowerCamelCase.
+
+One-character parameter names should be avoided.
+
+5.2.7 Local variable names
+
+Local variable names are written in lowerCamelCase, and can be abbreviated more liberally than other types of names.
+
+However, one-character names should be avoided, except for temporary and looping variables.
+
+Even when final and immutable, local variables are not considered to be constants, and should not be styled as constants.
+
+5.2.8 Type variable names
+
+Each type variable is named in one of two styles:
+
+A single capital letter, optionally followed by a single numeral (such as E, T, X, T2)
+A name in the form used for classes (see Section 5.2.2, Class names), followed by the capital letter T (examples: RequestT, FooBarT).
+5.3 Camel case: defined
+
+Sometimes there is more than one reasonable way to convert an English phrase into camel case, such as when acronyms or unusual constructs like "IPv6" or "iOS" are present. To improve predictability, Google Style specifies the following (nearly) deterministic scheme.
+
+Beginning with the prose form of the name:
+
+Convert the phrase to plain ASCII and remove any apostrophes. For example, "Müller's algorithm" might become "Muellers algorithm".
+Divide this result into words, splitting on spaces and any remaining punctuation (typically hyphens).
+Recommended: if any word already has a conventional camel-case appearance in common usage, split this into its constituent parts (e.g., "AdWords" becomes "ad words"). Note that a word such as "iOS" is not really in camel case per se; it defies any convention, so this recommendation does not apply.
+Now lowercase everything (including acronyms), then uppercase only the first character of:
+... each word, to yield upper camel case, or
+... each word except the first, to yield lower camel case
+Finally, join all the words into a single identifier.
+Note that the casing of the original words is almost entirely disregarded. Examples:
+
+Prose form	Correct	Incorrect
+"XML HTTP request"	XmlHttpRequest	XMLHTTPRequest
+"new customer ID"	newCustomerId	newCustomerID
+"inner stopwatch"	innerStopwatch	innerStopWatch
+"supports IPv6 on iOS?"	supportsIpv6OnIos	supportsIPv6OnIOS
+"YouTube importer"	YouTubeImporter
+YoutubeImporter*
+*Acceptable, but not recommended.
+
+Note: Some words are ambiguously hyphenated in the English language: for example "nonempty" and "non-empty" are both correct, so the method names checkNonempty and checkNonEmpty are likewise both correct.
+
+6 Programming Practices
+
+6.1 @Override: always used
+
+A method is marked with the @Override annotation whenever it is legal. This includes a class method overriding a superclass method, a class method implementing an interface method, and an interface method respecifying a superinterface method.
+
+Exception:@Override may be omitted when the parent method is @Deprecated.
+
+6.2 Caught exceptions: not ignored
+
+Except as noted below, it is very rarely correct to do nothing in response to a caught exception. (Typical responses are to log it, or if it is considered "impossible", rethrow it as an AssertionError.)
+
+When it truly is appropriate to take no action whatsoever in a catch block, the reason this is justified is explained in a comment.
+
+try {
+  int i = Integer.parseInt(response);
+  return handleNumericResponse(i);
+} catch (NumberFormatException ok) {
+  // it's not numeric; that's fine, just continue
+}
+return handleTextResponse(response);
+Exception: In tests, a caught exception may be ignored without comment if it is named expected. The following is a very common idiom for ensuring that the method under test does throw an exception of the expected type, so a comment is unnecessary here.
+
+try {
+  emptyStack.pop();
+  fail();
+} catch (NoSuchElementException expected) {
+}
+6.3 Static members: qualified using class
+
+When a reference to a static class member must be qualified, it is qualified with that class's name, not with a reference or expression of that class's type.
+
+Foo aFoo = ...;
+Foo.aStaticMethod(); // good
+aFoo.aStaticMethod(); // bad
+somethingThatYieldsAFoo().aStaticMethod(); // very bad
+6.4 Finalizers: not used
+
+It is extremely rare to override Object.finalize.
+
+Tip: Don't do it. If you absolutely must, first read and understand Effective Java Item 7, "Avoid Finalizers," very carefully, and then don't do it.
+
+7 Javadoc
+
+7.1 Formatting
+
+7.1.1 General form
+
+The basic formatting of Javadoc blocks is as seen in this example:
+
+/**
+ * Multiple lines of Javadoc text are written here,
+ * wrapped normally...
+ */
+public int method(String p1) { ... }
+... or in this single-line example:
+
+/** An especially short bit of Javadoc. */
+The basic form is always acceptable. The single-line form may be substituted when there are no at-clauses present, and the entirety of the Javadoc block (including comment markers) can fit on a single line.
+
+7.1.2 Paragraphs
+
+One blank line—that is, a line containing only the aligned leading asterisk (*)—appears between paragraphs, and before the group of "at-clauses" if present. Each paragraph but the first has <p> immediately before the first word, with no space after.
+
+7.1.3 At-clauses
+
+Any of the standard "at-clauses" that are used appear in the order @param, @return, @throws, @deprecated, and these four types never appear with an empty description. When an at-clause doesn't fit on a single line, continuation lines are indented four (or more) spaces from the position of the @.
+
+7.2 The summary fragment
+
+The Javadoc for each class and member begins with a brief summary fragment. This fragment is very important: it is the only part of the text that appears in certain contexts such as class and method indexes.
+
+This is a fragment—a noun phrase or verb phrase, not a complete sentence. It does not begin with A {@code Foo} is a..., or This method returns..., nor does it form a complete imperative sentence like Save the record.. However, the fragment is capitalized and punctuated as if it were a complete sentence.
+
+Tip: A common mistake is to write simple Javadoc in the form /** @return the customer ID */. This is incorrect, and should be changed to /** Returns the customer ID. */.
+
+7.3 Where Javadoc is used
+
+At the minimum, Javadoc is present for every public class, and every public or protected member of such a class, with a few exceptions noted below.
+
+Other classes and members still have Javadoc as needed. Whenever an implementation comment would be used to define the overall purpose or behavior of a class, method or field, that comment is written as Javadoc instead. (It's more uniform, and more tool-friendly.)
+
+7.3.1 Exception: self-explanatory methods
+
+Javadoc is optional for "simple, obvious" methods like getFoo, in cases where there really and truly is nothing else worthwhile to say but "Returns the foo".
+
+Important: it is not appropriate to cite this exception to justify omitting relevant information that a typical reader might need to know. For example, for a method named getCanonicalName, don't omit its documentation (with the rationale that it would say only /** Returns the canonical name. */) if a typical reader may have no idea what the term "canonical name" means!
+
+7.3.2 Exception: overrides
+
+Javadoc is not always present on a method that overrides a supertype method.
+
+Last changed: March 21, 2014
+
+Preface
+
+Like many Java developers, the first time I heard about lambda expressions it piqued my interest. Also like many others, I was disappointed when it was set back. However, it is better late than never.
+
+Java 8 is a giant step forward for the Java language. Writing this book has forced me to learn a lot more about it. In Project Lambda, Java gets a new closure syntax, method-references, and default methods on interfaces. It manages to add many of the features of functional languages without losing the clarity and simplicity Java developers have come to expect.
+
+Aside from Project Lambda, Java 8 also gets a new Date and Time API (JSR 310), the Nashorn JavaScript engine, and removes the Permanent Generation from the HotSpot virtual machine, among other changes.
+
+I would like to acknowledge the following people for providing valuable resources:
+
+Brian Goetz – “State of the Lambda”
+Aleksey Shipilev – jdk8-lambda-samples
+Richard Warburton – “Java 8 Lambdas”
+Julien Ponge – “Oracle Nashorn” in the Jan./Feb. 2014 issue of Java Magazine.
+Venkat Subramaniam – agiledeveloper.com
+All of the developers behind Java 8.
+The developers of Guava, joda-time, Groovy, and Scala.
+1. Overview
+
+This book is a short introduction to Java 8. After reading it, you should have a basic understanding of the new features and be ready to start using it.
+
+This book assumes that you have a good understanding of Java the language and the JVM. If you’re not familiar with the language, including features of Java 7, it might be hard to follow some of the examples.
+
+Java 8 includes the following:
+
+Lambda expressions
+Method references
+Default Methods (Defender methods)
+A new Stream API.
+Optional
+A new Date/Time API.
+Nashorn, the new JavaScript engine
+Removal of the Permanent Generation
+and more…
+The best way to read this book is with a Java 8 supporting IDE running so you can try out the new features.
+
+tip
+Code examples can be found on github.
+
+2. Lambda Expressions
+
+The biggest new feature of Java 8 is language level support for lambda expressions (Project Lambda). A lambda expression is like syntactic sugar for an anonymous class1 with one method whose type is inferred. However, it will have enormous implications for simplifying development.
+
+2.1 Syntax
+
+The main syntax of a lambda expression is “parameters -> body”. The compiler can usually use the context of the lambda expression to determine the functional interface2 being used and the types of the parameters. There are four important rules to the syntax:
+
+Declaring the types of the parameters is optional.
+Using parentheses around the parameter is optional if you have only one parameter.
+Using curly braces is optional (unless you need multiple statements).
+The “return” keyword is optional if you have a single expression that returns a value.
+Here are some examples of the syntax:
+
+1 () -> System.out.println(this)
+2 (String str) -> System.out.println(str)
+3 str -> System.out.println(str)
+4 (String s1, String s2) -> { return s2.length() - s1.length(); }
+5 (s1, s2) -> s2.length() - s1.length()
+The last expression could be used to sort a list; for example:
+
+1 Arrays.sort(strArray,
+2   (String s1, String s2) -> s2.length() - s1.length());
+In this case the lambda expression implements the Comparator interface to sort strings by length.
+
+2.2 Scope
+
+Here’s a short example of using lambdas with the Runnable interface:
+
+ 1 import static java.lang.System.out;
+ 2
+ 3 public class Hello {
+ 4 	Runnable r1 = () -> out.println(this);
+ 5 	Runnable r2 = () -> out.println(toString());
+ 6
+ 7 	public String toString() { return "Hello, world!"; }
+ 8
+ 9 	public static void main(String... args) {
+10 		new Hello().r1.run(); //Hello, world!
+11 		new Hello().r2.run(); //Hello, world!
+12 	}
+13 }
+The important thing to note is both the r1 and r2 lambdas call the toString() method of the Hello class. This demonstrates the scope available to the lambda.
+
+You can also refer to final variables or effectively final variables. A variable is effectively final if it is only assigned once.
+
+For example, using Spring’s HibernateTemplate:
+
+1 String sql = "delete * from User";
+2 getHibernateTemplate().execute(session ->
+3     session.createSQLQuery(sql).uniqueResult());
+In the above, you can refer to the variable sql because it is only assigned once. If you were to assign to it a second time, it would cause a compilation error.
+
+2.3 Method references
+
+Since a lambda expression is like an object-less method, wouldn’t be nice if we could refer to existing methods instead of using a lamda expression? This is exactly what we can do with method references.
+
+For example, imagine you frequently need to filter a list of Files based on file types. Assume you have the following set of methods for determining a file’s type:
+
+1 public class FileFilters {
+2 	public static boolean fileIsPdf(File file) {/*code*/}
+3 	public static boolean fileIsTxt(File file) {/*code*/}
+4 	public static boolean fileIsRtf(File file) {/*code*/}
+5 }
+Whenever you want to filter a list of files, you can use a method reference as in the following example (assuming you already defined a method getFiles() that returns a Stream):
+
+1 Stream<File> pdfs = getFiles().filter(FileFilters::fileIsPdf);
+2 Stream<File> txts = getFiles().filter(FileFilters::fileIsTxt);
+3 Stream<File> rtfs = getFiles().filter(FileFilters::fileIsRtf);
+Method references can point to:
+
+Static methods.
+Instance methods.
+Methods on particular instances.
+Constructors (ie. TreeSet::new)
+For example, using the new java.nio.file.Files.lines method:
+
+1 Files.lines(Paths.get("Nio.java"))
+2             .map(String::trim)
+3             .forEach(System.out::println);
+The above reads the file “Nio.java”, calls trim() on every line, and then prints out the lines.
+
+Notice that System.out::println refers to the println method on an instance of PrintStream.
+
+2.4 Functional Interfaces
+
+In Java 8 a functional interface is defined as an interface with exactly one abstract method. This even applies to interfaces that were created with previous versions of Java.
+
+Java 8 comes with several new functional interfaces in the package, java.util.function.
+
+Function<T,R> - takes an object of type T and returns R.
+Supplier<T> - just returns an object of type T.
+Predicate<T> - returns a boolean value based on input of type T.
+Consumer<T> - performs an action with given object of type T.
+BiFunction - like Function but with two parameters.
+BiConsumer - like Consumer but with two parameters.
+It also comes with several corresponding interfaces for primitive types, such as:
+
+IntConsumer
+IntFunction<R>
+IntPredicate
+IntSupplier
+information
+See the java.util.function Javadocs for more information.
+
+The coolest thing about functional interfaces is that they can be assigned to anything that would fulfill their contract. Take the following code for example:
+
+1 Function<String, String> atr = (name) -> {return "@" + name;};
+2 Function<String, Integer> leng = (name) -> name.length();
+3 Function<String, Integer> leng2 = String::length;
+This code is perfectly valid Java 8. The first line defines a function that prepends “@” to a String. The last two lines define functions that do the same thing: get the length of a String.
+
+The Java compiler is smart enough to convert the method reference to String’s length() method into a Function (a functional interface) whose apply method takes a String and returns an Integer. For example:
+
+1 for (String s : args) out.println(leng2.apply(s));
+This would print out the lengths of the given strings.
+
+Any interface can be functional interface, not merely those that come with Java. To declare your intention that an interface is functional, use the @FunctionalInterface annotation. Although not necessary, it will cause a compilation error if your interface does not satisfy the requirements (ie. one abstract method).
+
+information
+Github
+See jdk8-lambda-samples for more examples.
+
+2.5 Comparisons to Java 7
+
+To better illustrate the benefit of Lambda-expressions, here are some examples of how code from Java 7 can be shortened in Java 8.
+
+Creating an ActionListener
+1 // Java 7
+2 ActionListener al = new ActionListener() {
+3     @Override
+4     public void actionPerformed(ActionEvent e) {
+5         System.out.println(e.getActionCommand());
+6     }
+7 };
+8 // Java 8
+9 ActionListener al8 = e -> System.out.println(e.getActionCommand());
+Printing out a list of Strings
+1 // Java 7
+2 for (String s : list) {
+3     System.out.println(s);
+4 }
+5 //Java 8
+6 list.forEach(System.out::println);
+Sorting a list of Strings
+ 1 // Java 7
+ 2 Collections.sort(list, new Comparator<String>() {
+ 3     @Override
+ 4     public int compare(String s1, String s2) {
+ 5         return s1.length() - s2.length();
+ 6     }
+ 7 });
+ 8 //Java 8
+ 9 Collections.sort(list, (s1, s2) -> s1.length() - s2.length());
+10 // or
+11 list.sort(Comparator.comparingInt(String::length));
+Sorting
+For the sorting examples, assume you have the following Person class:
+
+ 1 public static class Person {
+ 2
+ 3     String firstName;
+ 4     String lastName;
+ 5
+ 6     public String getFirstName() {
+ 7         return firstName;
+ 8     }
+ 9
+10     public String getLastName() {
+11         return lastName;
+12     }
+13 }
+Here’s how you might sort this list in Java 7 by last-name and then first-name:
+
+ 1 Collections.sort(list, new Comparator<Person>() {
+ 2     @Override
+ 3     public int compare(Person p1, Person p2) {
+ 4         int n = p1.getLastName().compareTo(p2.getLastName());
+ 5         if (n == 0) {
+ 6             return p1.getFirstName().compareTo(p2.getFirstName());
+ 7         }
+ 8         return n;
+ 9     }
+10 });
+In Java 8, this can be shortened to the following:
+
+1 list.sort(Comparator.comparing(Person::getLastName)
+2         .thenComparing(Person::getFirstName));
+tip
+This example uses a static method on an interface (comparing) and a default method (thenComparing) which are discussed in the next chapter.
+
+A lambda expression is not an anonymous class; it actually uses invokedynamic in the byte-code.↩
+We will explain what “functional interface” means in a later section.↩
+3. Default Methods
+
+In order to add the stream method (or any others) to the core Collections API, Java needed another new feature, Default methods (also known as Defender Methods or Virtual Extension methods). This way they could add new methods to the List interface for example without breaking all the existing implementations (backwards compatibility).
+
+Default methods can be added to any interface. Like the name implies, any class that implements the interface but does not override the method will get the default implementation.
+
+For example, the stream method in the Collection interface is defined something like the following:
+
+1 default public Stream stream() {
+2 	return StreamSupport.stream(spliterator());
+3 }
+information
+See the Java docs for more on Spliterators.
+
+You can always override a default method if you need different behavior.
+
+3.1 Default and Functional
+
+An interface can have one or more default methods and still be functional.
+
+For example, take a look at the Iterable interface:
+
+ 1 @FunctionalInterface
+ 2 public interface Iterable {
+ 3 	Iterator iterator();
+ 4 	default void forEach(Consumer<? super T> action) {
+ 5 		Objects.requireNonNull(action);
+ 6 		for (T t : this) {
+ 7 			action.accept(t);
+ 8 		}
+ 9 	}
+10 }
+It has both the iterator() method and the forEach method.
+
+3.2 Multiple Defaults
+
+In the unlikely case that your class implements two or more interfaces that define the same default method, Java will throw a compilation error. You will need to override the method and choose from one of the methods. For example:
+
+ 1 interface Foo {
+ 2 	default void talk() {
+ 3 		out.println("Foo!");
+ 4 	}
+ 5 }
+ 6 interface Bar {
+ 7 	default void talk() {
+ 8 		out.println("Bar!");
+ 9 	}
+10 }
+11 class FooBar implements Foo, Bar {
+12 	@Override
+13 	void talk() { Foo.super.talk(); }
+14 }
+In the above code, talk is overridden and calls Foo’s talk method. This is similar to the way you refer to a super class in pre-Java-8.
+
+3.3 Static Methods on Interface
+
+Although not strictly related to default methods, the ability to add static methods to interfaces is a similar change to the Java language.
+
+For example, there are many static methods on the new Stream interface. This makes “helper” methods easier to find since they can be located directly on the interface, instead of a different class such as StreamUtil or Streams.
+
+Here’s an example in the new Stream interface:
+
+1 public static<T> Stream<T> of(T... values) {
+2     return Arrays.stream(values);
+3 }
+The above method creates a new stream based on the given values.
+
+4. Streams
+
+The Stream interface is such a fundamental part of Java 8 it deserves its own chapter.
+
+4.1 What is a Stream?
+
+The Stream interface is located in the java.util.stream package. It represents a sequence of objects somewhat like the Iterator interface. However, unlike the Iterator, it supports parallel execution.
+
+The Stream interface supports the map/filter/reduce pattern and executes lazily, forming the basis (along with lambdas) for functional-style programming in Java 8.
+
+There are also corresponding primitive streams (IntStream, DoubleStream, and LongStream) for performance reasons.
+
+4.2 Generating Streams
+
+There are many ways to create a Stream in Java 8. Many of the existing Java core library classes have Stream returning methods in Java 8.
+
+Streaming Collections
+The most obvious way to create a stream is from a Collection.
+
+The Collection interface has two default methods on it for creating streams:
+
+stream(): Returns a sequential Stream with the collection as its source.
+parallelStream(): Returns a possibly parallel Stream with the collection as its source.
+The ordering of the Stream relies on the underlying collection just like an Iterator.
+
+Streaming Files
+The BufferedReader now has the lines() method which returns a Stream; for example1:
+
+1 try (FileReader fr = new FileReader("file");
+2     BufferedReader br = new BufferedReader(fr)) {
+3     br.lines().forEach(System.out::println);
+4 }
+You can also read a file as a Stream using Files.lines(Path filePath); for example:
+
+1 try (Stream st = Files.lines(Paths.get("file"))) {
+2     st.forEach(System.out::println);
+3 }
+Note this populates lazily; it does not read the entire file when you call it.
+
+warning
+Files.lines(Path): Any IOException that is thrown while processing the file (after the file is opened) will get wrapped in an UncheckedIOException and thrown.
+
+Streaming File Trees
+There are several static methods on the Files class for navigating file trees using a Stream.
+
+list(Path dir) – Stream of files in the given directory.
+walk(Path dir)2 – Stream that traverses the file tree depth-first starting at the given directory.
+walk(Path dir, int maxDepth) – Same as walk(dir) but with a maximum depth.
+Streaming Text Patterns
+The Pattern class now has a method, splitAsStream(CharSequence), which creates a Stream.
+
+For example:
+
+1 import java.util.regex.Pattern;
+2 // later on...
+3 Pattern patt = Pattern.compile(",");
+4 patt.splitAsStream("a,b,c")
+5     .forEach(System.out::println);
+The above uses a very simple pattern, a comma, and splits the text into a stream and prints it out. This would produce the following output:
+
+1 a
+2 b
+3 c
+Infinite Streams
+Using the generate or iterate static methods on Stream, you can create a Stream of values including never ending streams. For example, you could call generate in the following way to create an infinite supply of objects:
+
+1 Stream.generate(() -> new Dragon());
+For example, you could use this technique to produce a stream of CPU load or memory usage. However, you should use this with caution. It is similar to an infinite loop.
+
+You could also use generate to create an infinite random number supply; for example:
+
+1 Stream.generate(() -> Math.random());
+However, the java.util.Random class does this for you with the following new methods: ints(), longs(), and doubles(). Each of those methods is overloaded with definitions similar to the following:
+
+ints(): An infinite Stream of random integers.
+ints(int n, int m): An infinite Stream of random integers from n (inclusive) to m (exclusive).
+ints(long size): A Stream of given size of random integers.
+ints(long size, int n, int m): A Stream of given size of random integers with given bounds.
+The iterate method is similar to generate except it takes an initial value and a Function that modifies that value. For example, you can iterate over the Integers using the following code:
+
+1 Stream.iterate(1, i -> i+1)
+2     .forEach(System.out::print);
+This would print out “1234…” continuously until you stop the program.
+
+tip
+There are ways to limit an infinite stream which we will cover later (filter and limit).
+
+Ranges
+There are also new methods for creating ranges of numbers as Streams.
+
+For example, the static method, range, on the IntStream interface:
+
+1 IntStream.range(1, 11)
+2     .forEach(System.out::println);
+The above would print out the numbers one through ten.
+
+Each primitive Stream (IntStream, DoubleStream, and LongStream) has a corresponding range method.
+
+Streaming Anything
+You can create a Stream from any number of elements or an array using the two following methods:
+
+1 Stream<Integer> s = Stream.of(1, 2, 3);
+2 Stream<Object> s2 = Arrays.stream(array);
+Stream.of can take any number of parameters of any type.
+
+4.3 For Each
+
+The most basic thing you can do with a Stream is loop through it using the forEach method.
+
+For example, to print out all of the files in the current directory, you could do the following:
+
+1 Files.list(Paths.get("."))
+2     .forEach(System.out::println);
+For the most part, this replaces the “for loop”. It is more concise, and more object-oriented since you are delegating the implementation of the actual loop.
+
+4.4 Map/Filter/Reduce
+
+Lambda expressions and default methods allow us to implement map/filter/reduce in Java 8. Actually it is already implemented for us in the standard library.
+
+For example, imagine you want to get the current point scores from a list of player-names and find the player with the most points. You have a simple class, PlayerPoints, and a getPoints method defined as the following:
+
+ 1 public static class PlayerPoints {
+ 2  public final String name;
+ 3  public final long points;
+ 4
+ 5  public PlayerPoints(String name, long points) {
+ 6    this.name = name;
+ 7    this.points = points;
+ 8  }
+ 9
+10  public String toString() {
+11    return name + ":" + points;
+12  }
+13 }
+14
+15 public static long getPoints(final String name) {
+16 	// gets the Points for the Player
+17 }
+Finding the highest player could be done very simply in Java 8 as shown in the following code:
+
+1 PlayerPoints highestPlayer =
+2   names.stream().map(name -> new PlayerPoints(name, getPoints(name)))
+3 	.reduce(new PlayerPoints("", 0.0),
+4 			(s1, s2) -> (s1.points > s2.points) ? s1 : s2);
+This could also be done in Java 7 with the dollar library (or similarly with Guava or Functional-Java), but it would be much more verbose as shown in the following:
+
+ 1 PlayerPoints highestPlayer =
+ 2   $(names).map(new Function<String, PlayerPoints>() {
+ 3 		public PlayerPoints call(String name) {
+ 4 			return new PlayerPoints(name, getPoints(name));
+ 5 		}
+ 6 	})
+ 7 	.reduce(new PlayerPoints("", 0.0),
+ 8 	new BiFunction<PlayerPoints, PlayerPoints, PlayerPoints>() {
+ 9 		public PlayerPoints call(PlayerPoints s1, PlayerPoints s2) {
+10 			return (s1.points > s2.points) ? s1 : s2;
+11 		}
+12 	});
+The major benefit to coding this way (apart from the reduction in lines of code) is the ability to hide the underlying implementation of map/reduce. For example, it’s possible that map and reduce are implemented concurrently, allowing you to easily take advantage of multiple processors. We’ll describe one way to do this (ParallelArray) in the following section.
+
+4.5 Parallel Array
+
+The ParallelArray was part of JSR-166, but ended up being excluded from the standard Java lib. It does exist and was released to the public domain (you can download it from the JSR website).
+
+Although it was already out there, it really wasn’t easy to use until closures were included in the Java language. In Java 7 using the ParallelArray looks like the following:
+
+ 1 // with this class
+ 2 public class Student {
+ 3     String name;
+ 4     int graduationYear;
+ 5     double gpa;
+ 6 }
+ 7 // this predicate
+ 8 final Ops.Predicate<Student> isSenior =
+ 9 	new Ops.Predicate<>() {
+10 		public boolean op(Student s) {
+11 			return s.graduationYear == Student.THIS_YEAR;
+12 		}
+13 	};
+14 // and this conversion operation
+15 final Ops.ObjectToDouble<Student> selectGpa =
+16 	new Ops.ObjectToDouble<>() {
+17 		public double op(Student student) {
+18 			return student.gpa;
+19 		}
+20 	};
+21 // create a fork-join-pool
+22 ForkJoinPool fjPool = new ForkJoinPool();
+23 ParallelArray<Student> students = new ParallelArray<>(fjPool, data);
+24 // find the best GPA:
+25 double bestGpa = students.withFilter(isSenior)
+26                          .withMapping(selectGpa)
+27                          .max();
+In Java 8, you can do the following:
+
+1 // create a fork-join-pool
+2 ForkJoinPool pool = new ForkJoinPool();
+3 ParallelArray<Student> students = new ParallelArray<>(pool,data);
+4 // find the best GPA:
+5 double bestGpa = students
+6     .withFilter((Student s) -> (s.graduationYear == THIS_YEAR))
+7     .withMapping((Student s) -> s.gpa)
+8     .max();
+However, Java 8’s addition of stream() and parallelStream() make this even easier:
+
+1 double bestGpa = students
+2     .parallelStream()
+3     .filter(s -> (s.graduationYear == THIS_YEAR))
+4     .mapToDouble(s -> s.gpa)
+5     .max().getAsDouble();
+This makes it extremely simple to switch between a sequential implementation and a concurrent one.
+
+Groovy GPars
+
+You can do something similar to this right now if you use Groovy with the GPars library in the following way:
+
+1 GParsPool.withPool {
+2    // a map-reduce functional style (students is a Collection)
+3    def bestGpa = students.parallel
+4        .filter{ s -> s.graduationYear == Student.THIS_YEAR }
+5        .map{ s -> s.gpa }
+6        .max()
+7 }
+The static method GParsPool.withPool takes in a closure and augments any Collection with several methods (using Groovy’s Category mechanism). The parallel method actually creates a ParallelArray (JSR-166) from the given Collection and uses it with a thin wrapper around it.
+
+4.6 Peek
+
+You can peek into a stream to do some action without interrupting the stream.
+
+For example you could print out elements to debug code:
+
+1 Files.list(Paths.get("."))
+2     .map(Path::getFileName)
+3     .peek(System.out::println)
+4     .forEach(p -> doSomething(p));
+You can use any action you want, but you should not try to modify elements; you should use map instead.
+
+4.7 Limit
+
+The limit(int n) method can be used to limit a stream to the given number of elements. For example:
+
+1 Random rnd = new Random();
+2 rnd.ints().limit(10)
+3     .forEach(System.out::println);
+The above would print out ten random integers.
+
+4.8 Sort
+
+Stream also has the sorted() method for sorting a stream. Like all intermediate methods on Stream (such as map, filter, and peek), the sorted() method executes lazily. Nothing happens until a terminating operation (such as reduce or forEach) is called. However, you should call a limiting operation like limit before calling sorted() on an infinite stream.
+
+For example, the following would throw a runtime exception (using build 1.8.0-b132):
+
+1 rnd.ints().sorted().limit(10)
+2     .forEach(System.out::println);
+However, the following code works just fine:
+
+1 rnd.ints().limit(10).sorted()
+2     .forEach(System.out::println);
+Also, you should call sorted() after any calls to filter. For example, this code prints out the first five Java file-names in the current directory:
+
+1 Files.list(Paths.get("."))
+2     .map(Path::getFileName) // still a path
+3     .map(Path::toString) // convert to Strings
+4     .filter(name -> name.endsWith(".java"))
+5     .sorted() // sort them alphabetically
+6     .limit(5) // first 5
+7     .forEach(System.out::println);
+The code above does the following:
+
+Lists the files in the current directory.
+Maps those files to file names.
+Finds names that end with “.java”.
+Takes only the first five (sorted alphabetically).
+Prints them out.
+4.9 Collectors and Statistics
+
+Since Streams are lazily evaluated and support parallel execution, you need a special way to combine results; this is called a Collector.
+
+A Collector represents a way to combine the elements of a Stream into one result. It consists of three things:
+
+A supplier of an initial value.
+An accumulator which adds to the initial value.
+A combiner which combines two results into one.
+There are two ways to do this: collect(supplier,accumulator,combiner), or collect(Collector) (types left off for brevity).
+
+Luckily, Java 8 comes with several Collectors built in. Import them the following way:
+
+1 import static java.util.stream.Collectors.*;
+Simple Collectors
+The simplest collectors are things like toList() and toCollection():
+
+1 // Accumulate names into a List
+2 List<String> list = dragons.stream()
+3         .map(Dragon::getName)
+4         .collect(toList());
+5
+6 // Accumulate names into a TreeSet
+7 Set<String> set = dragons.stream()
+8         .map(Dragon::getName)
+9         .collect(toCollection(TreeSet::new));
+Joining
+If you’re familiar with Apache Commons’ StringUtil.join, the joining collector is similar to it. It combines the stream using a given delimiter. For example:
+
+1 String names = dragons.stream()
+2         .map(Dragon::getName)
+3         .collect(joining(","));
+This would combine all of the names into one String separated by commas.
+
+Statistics
+More complex collectors resolve to a single value. For example, you can use an “averaging” Collector to get the average; for example:
+
+1 System.out.println("\n----->Average line length:");
+2 System.out.println(
+3     Files.lines(Paths.get("Nio.java"))
+4         .map(String::trim)
+5         .filter(s -> !s.isEmpty())
+6         .collect(averagingInt(String::length))
+7         );
+The above code calculates the average length of non-empty lines in the file “Nio.java”.
+
+Sometimes you want to collect multiple statistics about a collection. Because Streams are consumed when you call collect, you need to calculate all of your statistics at once. This is where SummaryStatistics comes in. First import the one you want to use:
+
+1 import java.util.IntSummaryStatistics;
+Then use the summarizingInt collector; for example:
+
+1 IntSummaryStatistics stats = Files.lines(Paths.get("Nio.java"))
+2         .map(String::trim)
+3         .filter(s -> !s.isEmpty())
+4         .collect(summarizingInt(String::length));
+5
+6 System.out.println(stats.getAverage());
+7 System.out.println("count=" + stats.getCount());
+8 System.out.println("max=" + stats.getMax());
+9 System.out.println("min=" + stats.getMin());
+The above code performs the same average as before, but also computes the maximum, minimum, and count of the elements.
+
+tip
+There’s also summarizingLong and summarizingDouble.
+
+Equivalently, you can map your stream to a primitive type and then call summaryStatistics(). For example:
+
+1 IntSummaryStatistics stats = Files.lines(Paths.get("Nio.java"))
+2     .map(String::trim)
+3     .filter(s -> !s.isEmpty())
+4     .mapToInt(String::length)
+5     .summaryStatistics();
+4.10 Grouping and Partitioning
+
+The groupingBy collector groups elements based on a function you provide. For example:
+
+1 // Group by first letter of name
+2 List<Dragon> dragons = getDragons();
+3 Map<Character,List<Dragon>> map = dragons.stream()
+4         .collect(groupingBy(dragon -> dragon.getName().charAt(0)));
+Similarly, the partitioningBy method creates a map with a boolean key. For example:
+
+1 // Group by whether or not the dragon is green
+2 Map<Boolean,List<Dragon>> map = dragons.stream()
+3         .collect(partitioningBy(Dragon::isGreen));
+tip
+Parallel Grouping
+To execute grouping in parallel (if you don’t care about ordering) you should use the groupingByConcurrent method. The underlying stream should be unordered to allow grouping to occur in parallel; for example: dragons.parallelStream().unordered().collect(groupingByConcurrent(Dragon::getColor));.
+
+4.11 Comparisons to Java 7
+
+To better illustrate the benefit of Streams in Java 8, here are some examples of code from Java 7 compared to their new versions.
+
+Finding a maximum
+ 1 // Java 7
+ 2 double max = 0;
+ 3
+ 4 for (Double d : list) {
+ 5     if (d > max) {
+ 6         max = d;
+ 7     }
+ 8 }
+ 9 //Java 8
+10 max = list.stream().reduce(0.0, Math::max);
+11 // or
+12 max = list.stream().mapToDouble(Number::doubleValue).max().getAsDouble();
+Calculating an average
+1 double total = 0;
+2 double ave = 0;
+3 // Java 7
+4 for (Double d : list) {
+5     total += d;
+6 }
+7 ave = total / ((double) list.size());
+8 //Java 8
+9 ave = list.stream().mapToDouble(Number::doubleValue).average().getAsDouble();
+Printing the numbers one through ten
+ 1 // Java 7
+ 2 for (int i = 1; i < 11; i++) {
+ 3     System.out.println(i);
+ 4 }
+ 5 // Java 8
+ 6 IntStream.range(1, 11)
+ 7     .forEach(System.out::println);
+ 8 //or
+ 9 Stream.iterate(1, i -> i+1).limit(10)
+10     .forEach(System.out::println);
+Joining Strings
+1 // Java 7 using commons-util
+2 List<String> names = new LinkedList<>();
+3 for (Dragon dragon : dragons)
+4     names.add(dragon.getName());
+5 String names = StringUtils.join(names, ",");
+6 // Java 8
+7 String names = dragons.stream()
+8     .map(Dragon::getName)
+9     .collect(Collectors.joining(","));
+Of course you should add a catch statement to this for error handling.↩
+The actual method signature is walk(Path start, FileVisitOption... options) but you will probably just use walk(Path).↩
+5. Optional
+
+Java 8 comes with the Optional class in the java.util package for avoiding null return values (and thus NullPointerException). It is very similar to Google Guava’s Optional, which is similar to Nat Pryce’s Maybe class and Scala’s Option class.
+
+The Billion Dollar Mistake
+
+Tony Hoare, the inventor of null, has gone on record calling it his “billion-dollar mistake”. Despite your opinion of null, many efforts have been made to make null-checks part of the compilation or automated-code-check process; for example, the @Nonnull annotation of JSR-305. Optional makes it very simple for API designers to avoid null.
+
+You can use Optional.of(x) to wrap a non-null value, Optional.empty() to represent a missing value, or Optional.ofNullable(x) to create an Optional from a reference that may or may not be null.
+
+After creating an instance of Optional, you then use isPresent() to determine if the there is a value and get() to get the value. Optional provides a few other helpful methods for dealing with missing values:
+
+orElse(T) – Returns the given default value if the Optional is empty.
+orElseGet(Supplier<T>) – Calls on the given Supplier to provide a value if the Optional is empty.
+orElseThrow(Supplier<X extends Throwable>) – Calls on the given Supplier for an exception to throw if the Optional is empty.
+It also includes functional style (lambda friendly) methods, like the following:
+
+filter(Predicate<? super T> predicate) – Filters the value and returns a new Optional.
+flatMap(Function<? super T,Optional<U>> mapper) – Performs a mapping operation which returns an Optional.
+ifPresent(Consumer<? super T> consumer) – Executes the given Consumer only if there is a value present (no return value).
+map(Function<? super T,? extends U> mapper) – Uses the given mapping Function and returns a new Optional.
+Stream Optional
+
+The new Stream interface has multiple methods which return Optional (in case there are no values in the Stream):
+
+reduce(BinaryOperator<T> accumulator) – Reduces the stream to a single value.
+max(Comparator<? super T> comparator) – Finds the maximum value.
+min(Comparator<? super T> comparator) – Finds the minimum value.
+6. Nashorn
+
+Nashorn replaces Rhino as the default JavaScript engine for the Oracle JVM. Nashorn is much faster since it uses the invokedynamic feature of the JVM. It also includes a command line tool (jjs).
+
+6.1 jjs
+
+JDK 8 includes the command line tool jjs for running JavaScript.
+
+You can run JavaScript files from the command line (assuming you have Java 8’s bin in your PATH):
+
+1 $ jjs script.js
+This can be useful for running scripts; for example, let’s say you wanted to quickly find the sum of some numbers:
+
+1 var data = [1, 3, 5, 7, 11]
+2 var sum = data.reduce(function(x, y) {return x + y}, 0)
+3 print(sum)
+Running the above code should print out 27.
+
+6.2 Scripting
+
+Running jjs with the -scripting option starts up an interactive shell where you can type and evaluate JavaScript.
+
+You can also embed variables into strings and have them evaluate; for example:
+
+1 jjs> var date = new Date()
+2 jjs> print("${date}")
+This would print out the current date and time.
+
+6.3 ScriptEngine
+
+You can also run JavaScript dynamically from Java.
+
+First, you need to import the ScriptEngine:
+
+1 import javax.script.ScriptEngine;
+2 import javax.script.ScriptEngineManager;
+Second, you use the ScriptEngineManager to get the Nashorn engine:
+
+1 ScriptEngineManager engineManager = new ScriptEngineManager();
+2 ScriptEngine engine = engineManager.getEngineByName("nashorn");
+Now you can evaluate javascript at any point:
+
+1 engine.eval("function p(s) { print(s) }");
+2 engine.eval("p('Hello Nashorn');");
+The eval method can also take a FileReader as input:
+
+1 engine.eval(new FileReader('library.js'));
+This way you can include and run any JavaScript. However, keep in mind that the typical variables available to you in the browser (window, document, etc.) are not available.
+
+6.4 Importing
+
+You can import and use Java classes and packages using the JavaImporter.
+
+For example, import java.util, the IO, and NIO file packages:
+
+1 var imports = new JavaImporter(java.util, java.io, java.nio.file);
+2 with (imports) {
+3         var paths = new LinkedList();
+4         print(paths instanceof LinkedList); //true
+5         paths.add(Paths.get("file1"));
+6         paths.add(Paths.get("file2"));
+7         paths.add(Paths.get("file3"));
+8         print(paths) // [file1, file2, file3]
+9 }
+The above demonstrates that paths is an instance of LinkedList and prints out the list.
+
+Later on you could add the following code to write text into the files:
+
+1 for (var i=0; i < paths.size(); i++)
+2 	Files.newOutputStream(paths.get(i))
+3 		.write("test\n".getBytes());
+We can use existing Java classes, but we can also create new ones.
+
+6.5 Extending
+
+You can extend Java classes and interfaces using the Java.type and Java.extend functions. For example, you can extend the Callable interface and implement the call method:
+
+ 1 var concurrent = new JavaImporter(java.util, java.util.concurrent);
+ 2 var Callable = Java.type("java.util.concurrent.Callable");
+ 3 with (concurrent) {
+ 4   var executor = Executors.newCachedThreadPool();
+ 5   var tasks = new LinkedHashSet();
+ 6   for (var i=0; i < 200; i++) {
+ 7     var MyTask = Java.extend(Callable, {call: function() {print("task " + i)}})
+ 8     var task = new MyTask();
+ 9     tasks.add(task);
+10     executor.submit(task);
+11   }
+12 }
+6.6 Invocable
+
+You can also invoke JavaScript functions directly from Java.
+
+Firstly, you need to cast the engine to the Invocable interface:
+
+1 Invocable inv = (Invocable) engine;
+Then, to invoke any function, simple use the invokeFunction method, for example:
+
+1 engine.eval("function p(s) { print(s) }");
+2 inv.invokeFunction("p", "hello");
+Lastly, you can use the getInterface method to implement any interface in JavaScript.
+
+For example, if you have the following JPrinter interface, you can use it like so:
+
+1 public static interface JPrinter {
+2     void p(String s);
+3 }
+4 // later on...
+5 JPrinter printer = inv.getInterface(JPrinter.class);
+6 printer.p("Hello again!");
+7. New Date and Time API
+
+Java 8 introduces a new Date/Time API that is thread-safe, easier to read, and more comprehensive than the previous API. Java’s Calendar implementation has not changed much since it was first introduced and Joda-Time is widely regarded as a better replacement. Java 8’s new Date/Time API is very similar to Joda-Time.
+
+7.1 New Classes
+
+The main difference you will notice is that there are several different classes to represent time, date, time period, and timezone specific data. Also there are transformers for dates and times.
+
+For dates and times without a timezone, use the following:
+
+LocalDate – Day, month, year.
+LocalTime – Time of day only.
+LocalDateTime – Both date and time.
+For timezone specific times you use ZonedDateTime.
+
+Previous to Java 8, to calculate the time eight hours in the future you would need to write something like the following:
+
+1 Calendar cal = Calendar.getInstance();
+2 cal.add(Calendar.HOUR, 8);
+3 cal.getTime(); // actually returns a Date
+In Java 8, you can more simply write the following:
+
+1 LocalTime now = LocalTime.now();
+2 LocalTime later = now.plus(8, HOURS);
+There are also well-named methods such as plusDays, plusMonths, minusDays, and minusMonths. For example:
+
+1 LocalDate today = LocalDate.now();
+2 LocalDate thirtyDaysFromNow = today.plusDays(30);
+3 LocalDate nextMonth = today.plusMonths(1);
+4 LocalDate aMonthAgo = today.minusMonths(1);
+Note that each method returns a different instance of LocalDate. The original LocalDate, today, remains unchanged. This is because the new Date-Time types are immutable. This allows them to be thread-safe and cacheable.
+
+7.2 Creation
+
+Creating new date and time objects is much easier and less error-prone in Java 8. Every type is immutable and has static factory methods.
+
+For example, creating a new LocalDate for March 15, 2014 is as simple as:
+
+1 LocalDate date = LocalDate.of(2014, 3, 15);
+For more type-safety, you can use the new Month enum:
+
+1 date = LocalDate.of(2014, Month.MARCH, 15);
+You can also easily create a LocalDateTime by combining an instance of LocalDate with a LocalTime:
+
+1 LocalTime time = LocalTime.of(12, 15, 0);
+2 LocalDateTime datetime = date.atTime(time);
+You could also use any of the following methods (on LocalDate):
+
+atTime(int hour, int minute)
+atTime(int hour, int minute, int second)
+atTime(int hour, int minute, int second, int nanoOfSecond)
+Every class also has the now() method, which corresponds to the instant (or date) it is called.
+
+7.3 Enums
+
+Java 8 adds several enums, such as java.time.temporal.ChronoUnit for expressing things like “days” and “hours” instead of the integer constants used in the Calendar API. For example:
+
+1 LocalDate today = LocalDate.now();
+2 LocalDate nextWeek = today.plus(1, ChronoUnit.WEEKS);
+3 LocalDate nextMonth = today.plus(1, ChronoUnit.MONTHS);
+4 LocalDate nextYear = today.plus(1, ChronoUnit.YEARS);
+5 LocalDate nextDecade = today.plus(1, ChronoUnit.DECADES);
+There’s also the java.time.DayOfWeek and java.time.Month enums.
+
+The month enum can be used to create LocalDates and is returned by LocalDate::getMonth. For example here is how you might create a LocalDate and print out the month.
+
+1 // import java.time.Month;
+2 LocalDate date = LocalDate.of(2014, Month.MARCH, 27);
+3 System.out.println(date.getMonth());
+This would print out “MARCH”.
+
+7.4 Clock
+
+The Clock can be used in conjunction with dates and times to help build your tests. During production a normal Clock can be used, and a different one during tests.
+
+To get the default clock, use the following:
+
+1 Clock.systemDefaultZone();
+The Clock can then be passed into factory methods; for example:
+
+1 LocalTime time = LocalTime.now(clock);
+7.5 Period and Duration
+
+Java 8 has two types for representing time differences as humans understand them, Period and Duration.
+
+Duration is a time-based amount of time, such as ‘34.5 seconds’. Period is a date-based amount of time, such as ‘2 years, 3 months and 4 days’.
+
+Periods and Durations can be determined using the between method:
+
+1 Period p = Period.between(date1, date2);
+2 Duration d = Duration.between(time1, time2);
+They can also be created using static methods. For example, Durations can be created for any amount of seconds, minutes, hours, or days:
+
+1 Duration twoHours = Duration.ofHours(2);
+2 Duration tenMinutes = Duration.ofMinutes(10);
+3 Duration thirtySecs = Duration.ofSeconds(30);
+Periods and Durations can be added or subtracted from Java 8 date types. For example:
+
+1 LocalTime t2 = time.plus(twoHours);
+7.6 Temporal Adjusters
+
+A TemporalAdjuster can be used to do tricky date “math” that is popular in business applications. For example they can be used to find the “first Monday of the month” or “next Tuesday”.
+
+The java.time.temporal.TemporalAdjusters class contains a bunch of useful methods for creating TemporalAdjusters. Here are a few of them:
+
+firstDayOfMonth()
+firstDayOfNextMonth()
+firstInMonth(DayOfWeek)
+lastDayOfMont()
+next(DayOfWeek)
+nextOrSame(DayOfWeek)
+previous(DayOfWeek)
+previousOrSame(DayOfWeek)
+To use a TemporalAdjuster use the with method. This method returns an adjusted copy of the date-time or date object. For example:
+
+1 import static java.time.temporal.TemporalAdjusters.*;
+2 //...
+3 LocalDate nextTuesday = LocalDate.now().with(next(DayOfWeek.TUESDAY));
+7.7 Instant
+
+The Instant class represents a point in time measured to the nanosecond. It forms the basis of time measurements in the Java 8 date-time API.
+
+Much like the old Date class, Instant measures time starting from the “epoch” (Jan. 1, 1970) and is time-zone ignorant.
+
+7.8 Time Zones
+
+Time-Zones are represented by the java.time.ZoneId class. There are two types of ZoneIds, fixed offsets and geographical regions. This is to compensate for things like “daylight saving time” which can be very complex.
+
+You can get an instance of a ZoneId in many ways including the following two:
+
+1 ZoneId mountainTime = ZoneId.of("America/Denver");
+2 ZoneId myZone = ZoneId.systemDefault();
+To print out all available IDs, use getAvailableZoneIds():
+
+1 System.out.println(ZoneId.getAvailableZoneIds());
+7.9 Backwards Compatibility
+
+The original Date and Calendar objects have the toInstant() method to convert them to the new Date-Time API. You can then use an ofInstant(Insant,ZoneId) method to get a LocalDateTime or ZonedDateTime object; for example:
+
+1 Date date = new Date();
+2 Instant now = date.toInstant();
+3 LocalDateTime dateTime = LocalDateTime.ofInstant(now, myZone);
+4 ZonedDateTime zdt = ZonedDateTime.ofInstant(now, myZone);
+8. No More Permanent Generation
+
+The proposed implementation will allocate class meta-data in native memory and move interned Strings and class statics to the Java heap. [http://openjdk.java.net/jeps/122]
+
+Most allocations for the class metadata are now allocated out of native memory. This means that you won’t have to set the “XX:PermSize” options anymore (they don’t exist).
+
+This also means that you will get a “java.lang.OutOfMemoryError: Metadata space” error message instead of “java.lang.OutOfMemoryError: Permgen space” when you run out of memory.
+
+This is part of the convergence of the Oracle JRockit and HotSpot JVMs.
+
+9. Miscellaneous
+
+Java 8 has tons of new features that you might miss with all of the focus on lambdas. Here are some of them:
+
+java.util.Base64
+Cryptography upgrades (lots)
+JDBC 4.2
+Repeatable Annotations
+Annotations on types
+For a more complete list, please see the official list.
+
+9.1 Base64
+
+Until now, Java developers have had to rely on third-party libraries for encoding and decoding Base-64. Since it is such a frequent operation, a large project will typically contain several different implementations of Base64. For example: Apache commons-codec, Spring, and Guava all have separate implementations.
+
+For this reason, Java 8 has java.util.Base64. It acts like a factory for Base64 encoders and decoders and has the following methods:
+
+getEncoder()
+getDecoder()
+getUrlEncoder()
+getUrlDecoder()
+Each factory method returns either an Encoder or Decoder.
+
+The URL Base-64 Encoder provides an encoding that is URL and Filename safe (62 is - and 63 is _).
+
+9.2 Annotations on Java Types
+
+Prior to Java 8, annotations could be used on any declaration. In Java 8, annotations can also be applied to the use of types. Here are some examples:
+
+ 1 // Class instance creation:
+ 2 new @Interned RocketShip();
+ 3
+ 4 // Type cast:
+ 5 notNullString = (@NonNull String) str;
+ 6
+ 7 // implements clause:
+ 8 class ImmutableSet<T> implements
+ 9         @Readonly Set<@Readonly T> { ... }
+10
+11 // Thrown exception declaration:
+12 void launchRocket() throws
+13    	@Critical FireException { ... }
+This new ability is primarily aimed at supporting type-checking frameworks, such as Checker. These frameworks help find errors in your code at compile time.
+
+9.3 Repeating Annotations
+
+Java 8 will allow annotations annotated with @Repeatable to be repeated.
+
+For example, let’s say you’re coding a game and want to use annotations to schedule when methods should be called. You can declare multiple schedules using multiple annotations:
+
+1 // the first of the month and every monday at 7am
+2 @Schedule(dayOfMonth="first")
+3 @Schedule(dayOfWeek="Monday", hour=7)
+4 public void doGoblinInvasion() { ... }
+For this to be possible, you need to have the following:
+
+The Schedule annotation needs to use the meta-annotation @Repeatable.
+There needs to be another annotation as declared by the @Repeatable annotation.
+Due to Java’s emphasis on backwards-compatibility, repeating annotations are actually stored within another annotation (that you provide). The @Repeatable annotation takes in a value that is the class of the containing annotation. For example:
+
+1 // Schedule.java
+2 @Repeatable(Schedules.class)
+3 public @interface Schedule {...}
+4 // Schedules.java
+5 public @interface Schedules {
+6     Schedule[] value;
+7 }
+Schedule is now a repeatable annotation.
+
+You can use reflection to access repeatable annotations at runtime. To do this there is a new method called getAnnotationsByType(Class annotationClass) on Class, Constructor, Method, etc. It returns an array of all such annotations (or an empty array if there are none).
+
+10. Functional Programming in Java 8
+
+Java 8 manages to add many of the features of functional languages without significantly changing the Java language.
+
+When lambda expressions, method-references, the Stream interface, and immutable data-structures are combined, Java enables what could be called “functional programming” (FP).
+
+For the purposes of this book, the three pillars of FP are as follows:
+
+Functions
+Immutability
+Concurrency
+10.1 Functions
+
+Of course, as the name implies, functional programming is based on functions as a first-class feature. Java 8 arguably elevates functions to a first-class feature with the Lambda Project and functional interfaces.
+
+The Function interface (and related interfaces IntFunction, DoubleFunction, LongFunction, BiFunction, etc.) represents the compromise made by Java 8 in elevating functions to objects. This interface allows functions to be passed as arguments, stored as variables, and be returned by methods.
+
+The Function interface has the following default methods:
+
+andThen(Function): Returns a composed function that first applies this function to its input, and then applies the given function to the result.
+compose(Function): Similar to andThen but in reversed order (first applies the given function to its input, and then this function).
+identity(): Returns a function that always returns its input argument.
+You can use these methods to create a chain for creating a function; for example:
+
+1 Function<Integer,String> f = Function.<Integer>identity()
+2         .andThen(i -> 2*i).andThen(i -> "str" + i);
+The resulting function would take an Integer, multiply it by two, and then prepend “str” to it.
+
+You can use andThen any number of times to create a single function. Also, remember that functions can be passed and returned from methods. Here’s an example involving the new Date-Time API:
+
+1 public Function<LocalDate,LocalDateTime> dateTimeFunction(
+2     final Function<LocalDate,LocalDate> f) {
+3
+4     return f.andThen(d -> d.atTime(2, 2));
+5 }
+This method would take in a function that operates on a LocalDate and convert it into a function that returns a LocalDateTime (with a time of 2:02am).
+
+Tuples
+If you need a functional interface for a method with more than two parameters (eg. “TriFunction”) you need to make it yourself or use a library. Another way to handle this issue is to use a data structure called a Tuple.
+
+A Tuple is a typed data structure for holding a number of elements. Some languages, such as Scala, have built-in support for Tuples. Tuples are useful whenever you are handling multiple related values, but don’t want all of the overhead of creating a new class.
+
+Here’s a very simple example of implementing a Tuple with two elements:
+
+ 1 public class Tuple2<A, B> {
+ 2     public final A _1;
+ 3     public final B _2;
+ 4
+ 5     public Tuple2(A a, B b) {
+ 6             this._1 = a;
+ 7             this._2 = b;
+ 8     }
+ 9
+10     @Override
+11     public A get_1() {
+12             return _1;
+13     }
+14
+15     @Override
+16     public B get_2() {
+17             return _2;
+18     }
+19 }
+Tuples also allow you to approximate returning multiple values.
+
+tip
+There are several implementations of Tuples available in Java, such as javatuples and totallylazy.
+
+10.2 Immutability
+
+In functional programming, state is considered harmful and avoided whenever possible. Instead, immutable (unchangeable) data structures are preferred. For example, String is an immutable type in Java.
+
+As you may have learned, Java 8’s new Date-Time classes are immutable. What you may not have realized is that almost everything added in Java 8 is immutable (Optional and Streams for example).
+
+However, you need to be careful when using Java 8’s new functional patterns to not accidentally fall back into the mutable mind-set. For example, the following type of code should be avoided:
+
+1 int[] myCount = new int[1];
+2 list.forEach(dragon -> {
+3     if (dragon.isGreen()) myCount[0]++;
+4 }
+You may think you are being clever, but this kind of thing can cause problems. Instead, you should do something like the following:
+
+1 list.stream().filter(Dragon::isGreen).count();
+If you ever find yourself resorting to mutability, consider if you could use some combination of “filter”, “map”, “reduce” or “collect” instead.
+
+10.3 Concurrency
+
+With the increasing popularity of multi-core processors, concurrent programming has become more important. Functional programming forms a solid basis for concurrent programming and Java 8 supports concurrency in many different ways.
+
+One of those ways is the parallelStream() method on Collection. It provides a very quick way to use a Stream concurrently. However, like all optimizations, you should test to make sure that your code is actually faster, and it should be used sparingly. Too much concurrency could actually cause your application to slow down.
+
+Another way Java 8 supports concurrency is with the new CompletableFuture class. It has the supplyAsync static method that takes in the functional interface Supplier. It also has the method thenAccept which takes in a Consumer that handles completion of the task. The CompletableFuture calls on the given supplier in a different thread and executes the consumer when complete.
+
+When used in conjunction with things like the CountDownLatch, AtomicInteger, AtomicLong, AtomicReference, … you can implement thread-safe, concurrent FP-like code; for example:
+
+ 1 public Dragon closestDragon(Location location) {
+ 2     AtomicReference<DragonDistance> closest =
+ 3         new AtomicReference<>(DragonDistance.worstMatch());
+ 4     CountDownLatch latch = new CountDownLatch(dragons.size());
+ 5     dragons.forEach(dragon -> {
+ 6         CompletableFuture.supplyAsync(() -> dragon.distance(location))
+ 7           .thenAccept(result -> {
+ 8             closest.accumulateAndGet(result, DragonDistance::closest);
+ 9             latch.countDown();
+10             });
+11         });
+12     try {
+13         latch.await();
+14     } catch (InterruptedException e) {
+15         throw new RuntimeException("Interrupted during calculations", e);
+16     }
+17     return closest.get().getDragon();
+18 }
+This example finds the closest dragon to a certain Location (assume that Dragon’s distance method involves a time-consuming calculation).
+
+However, this could be simplified using the parallelStream() default method (since only one type of calculation is going on) in the following way:
+
+1 public Dragon closestDragon(Location location) {
+2     return dragons.parallelStream()
+3       .map(dragon -> dragon.distance(location))
+4       .reduce(DistancePair.worstMatch(), DragonDistance::closest)
+5       .getDragon();
+6 }
+This performs essentially the same task as the previous example but in a more concise (and functional) way.
+
+10.4 Tail-Call Optimization
+
+One of the hallmarks of functional programming is tail-call recursion1. It solves the same problem as iteration (which does not exist in FP). Unfortunately, it can cause stack-overflows if not properly optimized by the compiler.
+
+Tail-Call optimization refers to when a compiler converts a recursive function call into a loop to avoid using the call stack. For example, a function that uses tail-call recursion in Lisp will be automatically optimized this way.
+
+Java 8 does not support tail-call optimization like some other languages (yet). However, it is possible to approximate it using something like the following interface:
+
+ 1 @FunctionalInterface
+ 2 public interface Tail<T> {
+ 3
+ 4     Tail<T> apply();
+ 5
+ 6     default boolean isDone() {
+ 7         return false;
+ 8     }
+ 9
+10     default T result() {
+11         throw new UnsupportedOperationException("Not done yet.");
+12     }
+13
+14     default T invoke() {
+15         return Stream.iterate(this, Tail::apply)
+16                 .filter(Tail::isDone)
+17                 .findFirst()
+18                 .get()
+19                 .result();
+20     }
+The Tail interface has three default methods and one abstract-method (apply). The invoke() method contains the meat of the “tail-call optimization”:
+
+It takes advantage of Stream’s iterate method to create an infinite Stream which will continuously call Tail’s apply method.
+Then it uses filter and findFirst to stop the Stream when isDone() returns true.
+Finally, it returns the result.
+To implement the “done” condition, there is the following additional static method on Tail:
+
+ 1 static <T> Tail<T> done(final T value) {
+ 2     return new Tail<T>() {
+ 3         @Override
+ 4         public T result() {
+ 5           return value;
+ 6         }
+ 7         @Override
+ 8         public boolean isDone() {
+ 9           return true;
+10         }
+11         @Override
+12         public Tail<T> apply() {
+13           throw new UnsupportedOperationException("Not supported.");
+14         }
+15     };
+16 }
+With the Tail interface you can mimic tail-call recursion quite easily in Java 8. Here’s an example of calculating factorial using this interface (using BigInteger so that very large factorials can be computed):
+
+ 1 public static BigInteger factorial(int n) {
+ 2     return streamFactorial(BigInteger.ONE, n).invoke();
+ 3 }
+ 4 private static Tail<BigInteger> streamFactorial(BigInteger x, int n) {
+ 5     return () -> {
+ 6       switch (n) {
+ 7         case 1:
+ 8           return Tail.done(x);
+ 9         default:
+10           return streamFactorial(x.multiply(BigInteger.valueOf(n)), n - 1);
+11       }
+12     };
+13 }
+Using this method, you can make extremely fast programs while still maintaining the functional style.
+
+Of course the JVM does a lot optimization by itself, so this may not always be the best course. However, it is something to keep in mind.
+
+In this particular case, a simple recursive factorial is faster than the code above, however it causes a StackOverflowError for sufficiently large numbers whereas streamFactorial does not.
+
+Tail call recursion is when a function call happens inside a function as its final action.↩
+11. Conclusion
+
+Thank you for reading this short introduction to Java 8. Hopefully you learned a lot and are ready to starting using it yourself.
+
+To recap, Java 8 includes the following:
+
+Lambda expressions
+Method references
+Default Methods (Defender methods)
+A new Stream API.
+Optional
+A new Date/Time API.
+Nashorn, the new JavaScript engine
+Removal of the Permanent Generation
+To keep track of possible future features of Java, you might want to look at
+
+Apache Commons Lang StringUtils
+So, thought it'd be good to talk about another Java library that I like. It's been around for a while and is not perhaps the most exciting library, but it is very very useful. I probably make use of it daily.
+
+org.apache.commons.lang.StringUtils
+StringUtils is part of Apache Commons Lang (http://commons.apache.org/lang/, and as the name suggest it provides some nice utilities for dealing with Strings, going beyond what is offered in java.lang.String. It consists of over 50 static methods, and I'm not going to cover every single one of them, just a selection of methods that I make the most use of.
+
+There are two different versions available, the newer org.apache.commons.lang3.StringUtils and the older org.apache.commons.lang.StringUtils. There are not really any significant differences between the two. lang3.StringUtils requires Java 5.0 and is probably the version you'll want to use.
+
+
+
+public static boolean equals(CharSequence str1, CharSequence str2)
+Thought I'd start with one of the most straight forward methods. equals. This does exactly what you'd expect, it takes two Strings and returns true if they are identical, or false if they're not.
+
+But java.lang.String already has a perfectly good equals method? Why on earth would I want to use a third party implementation?
+It's a fair question. Let's look at some code, can you see any problems?
+
+?
+1
+2
+3
+4
+5
+public void doStuffWithString(String stringParam) {
+    if(stringParam.equals("MyStringValue")) {
+        // do stuff
+    }
+}
+That's a NullPointerException waiting to happen!
+
+There are a couple of ways around this:
+
+?
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+public void safeDoStuffWithString1(String stringParam) {
+    if(stringParam != null && stringParam.equals("MyStringValue")) {
+        // do stuff
+    }
+}
+
+public void safeDoStuffWithString2(String stringParm) {
+    if("MyStringValue".equals(stringParam)) {
+        // do stuff
+    }
+}
+Personally I'm not a fan of either method. I think null checks pollute code, and to me "MyStringValue".equals(stringParam) just doesn't scan well, it looks wrong.
+
+This is where StringUtils.equals comes in handy, it's null safe. It doesn't matter what you pass it, it won't NullPointer on you! So you could rewrite the simple method as follows:
+
+?
+1
+2
+3
+4
+5
+public void safeDoStuffWithString3(String stringParam) {
+    if(StringUtils.equals(stringParam,"MyStringValue)) {
+        // do stuff
+    }
+}
+It's personal preference, but I think this reads better than the first two examples. There's nothing wrong with them, but I do think StringUtils.equals() is worth considering.
+
+
+
+isEmpty, isNotEmpty, isBlank, isNotBlank
+OK, these look pretty self explanatory, I'm guessing they're all null safe?
+
+You're probably spotting a pattern here. isEmpty is indeed a null safe replacement for java.lang.String.isEmpty(), and isNotEmpty is it's inverse. So no more null checks:
+
+?
+1
+2
+3
+4
+5
+6
+7
+if(myString != null && !myString.isEmpty()) { // urghh
+   // Do stuff with myString
+}
+
+if(StringUtils.isNotEmpty(myString)) { // much nicer
+   // Do stuff with myString
+}
+So, why Blank and Empty?
+
+There is a difference, isBlank also returns true if the String just contains whitespace, ie...
+
+?
+1
+2
+3
+String someWhiteSpace = "    \t  \n";
+StringUtils.isEmpty(someWhiteSpace); // false
+StringUtils.isBlank(someWhiteSpace); // true
+
+
+public static String[] split(String str, String separatorChars)
+Right that looks just like String.split(), so this is just a null safe version of the built in Java method?
+
+Well, yes it certainly is null safe. Trying to split a null string results in null, and a null separator splits on whitespace. But there is another reason you should consider using StringUtils.split(...), and that's the fact that java.lang.String.split takes a regular expression as a separator. For example the following may not do what you want:
+
+?
+1
+2
+3
+4
+5
+public void possiblyNotWhatYouWant() {
+    String contrivedExampleString = "one.two.three.four";
+    String[] result = contrivedExampleString.split(".");
+    System.out.println(result.length); // 0
+}
+But all I have to do is put a couple of backslashes in front of the '.' and it will work fine. It's not really a big deal is it?
+Perhaps not, but there's one last advantage to using StringUtils.split, and that's the fact that regular expressions are expensive. In fact when I tested splitting a String on a comma (a fairly common use case in my experience), StingUtils.split runs over four times faster!
+
+
+
+public static String join(Iterable iterable, String separator)
+Ah, finally something genuinely useful!
+
+Indeed I've never found an elegant way of concatenating strings with a separator, there's always that annoying conditional require to check if want to insert the separator or not. So it's nice there's a utility to this for me. Here's a quick example:
+
+?
+1
+2
+String[] numbers = {"one", "two", "three"};
+StringUtils.join(numbers,",");  // returns "one,two,three"
+There's also various overloaded versions of join that take Arrays, and Iterators.
+
+Ok, I'm convinced. This looks like a pretty useful library, what else can it do?
+Quite a lot, but like I said earlier I won't bother going through every single method available, I'd just end up repeating what's said in the API documentation. I'd really recommend taking a closer look: http://commons.apache.org/lang/api-3.1/org/apache/commons/lang3/StringUtils.html
+
+So basically if you ever need to do something with a String that isn't covered by Java's core String library (and maybe even stuff that is), take a look at StringUtils.
+
+
+TheServerSide.com is doing a series of articles on Spring development, the first of which started off with how to configure the most basic environment possible that would support the development and testing of Spring based applications. Of course, Spring isn’t the only game in town when it comes to Dependency Injection(DI) and Inversion of Control (IoC). In fact, the sexy newcomer is Google, or more specifically, Google Guice. So, we thought it would be a good idea to go through the exact same tutorials that are being done with Spring, and show you how you could do the exact same stuff with a far superior dependency injection tool like Guice. (No flagrant trolling attempts! – Editors)
+
+Getting Started with Google Guice
+
+So, how do you get started with Google Guice? Well, first you download it. The current URL is as follows:
+
+http://code.google.com/p/google-guice/downloads/list
+
+Of course, these URLs tend to change as soon as articles get published that reference them, but you should be able to find the download somewhere at code.google.com.
+
+The only download you want is the guice-1.0.zip file. Every other file is highly infectious and contagious.
+
+I usually like moving all of the various jar files I need to a special lib folder, but all of the required jar files, and even a few that I don’t think are going to be required at all, like the struts2 plugin jar file, are all nice and neatly tucked away in this _guice folder, so I’m going to leave things just the way they are. Just let it be known that these JAR files are the bytecode embodiment of the Guice framework.
+
+Writing Some Guice Code
+
+So, now I just want to write some extremely simple code that will make sure that my Java runtime environment can link to these Guice JARs. (Say that five times fast.). I’m assuming you can afford one of those fancy-dancy IDE tools like NetBeans or Eclipse, and that you have some knowledge of configuring a project and a classpath in those expensive development tools of yours. All I can afford is the JDK, which is installed in my _jdk1.6 directory off the root of C:\. I’m hoping that if I can get Guice to work using nothing more than a command prompt, Emacs and a JDK, that getting this working in a marvelous IDE should be a lead pipe cinch for you. To code the old-school way, I’ve created a subset of folders off my C:\ drive that looks like this:
+
+
+
+Getting Started with Google Guice
+By Jason Tee & Cameron McKenzie
+TheServerSide.com
+Digg This Stumble Delicious
+An Introduction to Google Guice: A Tutorial
+
+Watch this Google Guice Tutorial as a Video CBT
+
+Tutorial 1 (This One): Getting Started with Google Guice: Environment Setup and Configuration
+Tutorial 2: The Simplest IoC Example You've Ever Seen, with Google Guice
+
+TheServerSide.com is doing a series of articles on Spring development, the first of which started off with how to configure the most basic environment possible that would support the development and testing of Spring based applications. Of course, Spring isn’t the only game in town when it comes to Dependency Injection(DI) and Inversion of Control (IoC). In fact, the sexy newcomer is Google, or more specifically, Google Guice. So, we thought it would be a good idea to go through the exact same tutorials that are being done with Spring, and show you how you could do the exact same stuff with a far superior dependency injection tool like Guice. (No flagrant trolling attempts! – Editors)
+
+Getting Started with Google Guice
+
+So, how do you get started with Google Guice? Well, first you download it. The current URL is as follows:
+
+http://code.google.com/p/google-guice/downloads/list
+
+Of course, these URLs tend to change as soon as articles get published that reference them, but you should be able to find the download somewhere at code.google.com.
+
+The only download you want is the guice-1.0.zip file. Every other file is highly infectious and contagious.
+
+http://lh5.ggpht.com/_41A-R4AR9qM/S_6TVenFwsI/AAAAAAAAATk/zYfemEjICZs/s800/googleguiceconfig01.gif
+
+The Guice JAR Files
+
+Using your favorite zip utility, unzip the download into a folder that you’ll be able to find on your computer. My preference is to unzip to a folder named _guice off the root of C:\.
+
+
+
+I usually like moving all of the various jar files I need to a special lib folder, but all of the required jar files, and even a few that I don’t think are going to be required at all, like the struts2 plugin jar file, are all nice and neatly tucked away in this _guice folder, so I’m going to leave things just the way they are. Just let it be known that these JAR files are the bytecode embodiment of the Guice framework.
+
+Writing Some Guice Code
+
+So, now I just want to write some extremely simple code that will make sure that my Java runtime environment can link to these Guice JARs. (Say that five times fast.). I’m assuming you can afford one of those fancy-dancy IDE tools like NetBeans or Eclipse, and that you have some knowledge of configuring a project and a classpath in those expensive development tools of yours. All I can afford is the JDK, which is installed in my _jdk1.6 directory off the root of C:\. I’m hoping that if I can get Guice to work using nothing more than a command prompt, Emacs and a JDK, that getting this working in a marvelous IDE should be a lead pipe cinch for you. To code the old-school way, I’ve created a subset of folders off my C:\ drive that looks like this:
+
+C:\_mycode\com\mcnz\guice\
+
+Google Guice Code
+
+
+And smack dab in that guice folder, I’m going to create a class called GumRunner. In the previous example, I created a class called SumRunner because I was using Spring. It just seems appropriate that this class should be called GumRunner out of respect for Guice.
+
+The GumRunner Class
+
+My GumRunner class is slender enough to make Kate Moss want to diet. All it does is import a key Guice class, create an instance of a Guice injector in the main method, and then do a println on that object. There’s no DI (Dependency Injection), there’s no IoC (Inversion of Control) and there’s certainly nobody here from the IOC (International Olympic Committee). All we have are a few simple lines of code that ensure that you can link to important Guice components at design time and runtime; and really, if you can’t do that, what’s the point of doing a bunch of other stuff?
+
+package com.mcnz.guice;
+import com.google.inject.*;
+
+public class GumRunner {
+
+   public static void main(String args[]){
+
+      Injector injector = Guice.createInjector();
+     System.out.println(injector);
+
+  }
+}
+
+Compile and Run That Guice Code
+
+I compile my code by issuing the following command:
+
+
+With successful compilation, I get absolutely no confirmation messages telling me how wonderful and clever I am. However, I do get a new .class file in my \guice folder.
+
+
+
+
+
+I then run my code with the following command:
+
+The output is completely incomprehensible gobbledygook:
+
+Injector[bindings=[Key[type=com.google.inject.Injector, annotation=[none]]=Bindi
+
+ngImpl[key=Key[type=com.google.inject.Injector, annotation=[none]], source=com.g
+
+oogle.inject.Guice.createInjector(Guice.java:75), provider=Provider<Injector>],
+
+Key[type=java.util.logging.Logger, annotation=[none]]=BindingImpl[key=Key[type=j
+
+ava.util.logging.Logger, annotation=[none]], source=com.google.inject.Guice.crea
+
+teInjector(Guice.java:75), provider=Provider<Logger>], Key[type=com.google.injec
+
+t.Stage, annotation=[none]]=BindingImpl[key=Key[type=com.google.inject.Stage, an
+
+notation=[none]], source=com.google.inject.Guice.createInjector(Guice.java:75),
+
+provider=ConstantFactory[value=DEVELOPMENT]]]]
+
+Here's a look at my DOS prompt, just in case you're into those types of things:
+
+
+And That's It! Now, Onwards and Upwards!
+
+Sure, it's gobbledygook, but gobbledygook or not, a nice little printout like this tells me that my environment is configured, I’m properly linking to the Google Guice JAR files, and I’m ready to move onto the next step, and that is performing some DI and IoC with my new environment. Stay tuned for more Guice tutorials that will do just that, not to mention a bunch of Spring tutorials on the same subject that will make it really fun and easy to compare the two IoC containers.
+
+Watch this Google Guice Tutorial as a Video CBT
+
+Tutorial 1 (This One): Getting Started with Google Guice: Environment Setup and Configuration
+Tutorial 2: The Simplest IoC Example You've Ever Seen, with Google Guice
+
+Watch the Corresponding Tutorials on Environment Configuration and IoC with Spring 3.
+

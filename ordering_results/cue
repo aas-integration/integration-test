@@ -1,0 +1,6 @@
+#!/bin/zsh
+# sim api recommender cli
+
+# java -cp ".:/java:/big.txt:/english:/cue-0.1-executable.jar" -jar cue-0.1-executable.jar $*
+
+java -cp ".:cue-0.1-executable.jar:*" com.vesperin.cue.Cue $*
