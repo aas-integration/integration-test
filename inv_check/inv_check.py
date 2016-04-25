@@ -5,36 +5,21 @@ import traceback
 import urllib
 import zipfile
 
-sys.path.insert(0, os.path.abspath('..'))
-import ontology_to_daikon
-
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
-daikon_jar = os.path.join(WORKING_DIR, "daikon.jar")  
+daikon_jar = os.path.join(WORKING_DIR, '..', 'libs', "daikon.jar")
 DAIKON_SPLITTER = "====================="
 
-def find_or_download_tools(): 
-  if not os.path.isfile(daikon_jar):    
-    print("Downloading annotation daikon to %s" % daikon_jar)
-    urllib.urlretrieve("http://plse.cs.washington.edu/daikon/download/daikon.jar", daikon_jar)
-
-
-def run_command(cmd):
-  print (" ".join(cmd))
-  try:
-    return subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-  except:
-    raise Exception('calling {cmd} failed\n{trace}'.format(cmd=' '.join(cmd),trace=traceback.format_exc()))
-
+sys.path.insert(0, os.path.abspath(os.path.join(WORKING_DIR, '..')))
+import ontology_to_daikon
+import common
 
 def run_daikon_on_dtrace_file(dtrace_file, classpath=daikon_jar, checked_invariant=None):
-
   cmd = ["java", "-classpath", classpath, "daikon.Daikon", dtrace_file]
   if checked_invariant:
     print ("DO SOMETHING")
     cmd += ["--disable-all-invariants", "--user-defined-invariant", checked_invariant]
 
-  return run_command(cmd)
-
+  return common.run_cmd(cmd, print_output=True)
 
 
 def find_ppts_that_establish_inv_in_daikon_output(daikon_output, inv_substring):
@@ -69,31 +54,25 @@ def find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_n
   ppts = find_ppts_that_establish_inv_in_daikon_output(daikon_output, pattern_class_name)
   return ppts
 
-
-def test(): 
-  test_dtrace = os.path.join(WORKING_DIR, "test.dtrace.gz")
-  test_inv_name = "TestInvariant"
-  ontology_to_daikon.create_daikon_invariant(os.path.join(WORKING_DIR, "README.md"), test_inv_name)
-  cmd = ["javac", "-classpath", "daikon.jar:.", test_inv_name+".java"]
-  run_command(cmd)  
-  print ("Finding program points")
-  ppts = find_ppts_that_establish_inv(test_dtrace, WORKING_DIR, test_inv_name)
-  print ("deleting temp files")
-  os.remove(test_inv_name+".class")
-  os.remove(test_inv_name+".java")
-  os.remove("test.inv.gz")
-  #output = run_daikon_on_dtrace_file(test_dtrace, checked_invariant="daikon.inv.unary.sequence.EltwiseIntLessThan")
-  #print output
-  #ppts = find_ppts_that_establish_inv_in_daikon_output(output, " sorted by ")
-  print ("Methods that establish FirstMuseInvariant:")
-  for ppt in ppts:
-    print ppt
-
-
-def main(): 
-  find_or_download_tools()
-  test()
-
+def main():
+  with common.cd(WORKING_DIR):
+    test_dtrace = "test.dtrace.gz"
+    test_inv_name = "TestInvariant"
+    ontology_to_daikon.create_daikon_invariant("README.md", test_inv_name)
+    cmd = ["javac", "-classpath", daikon_jar+ ":.", test_inv_name+".java"]
+    common.run_cmd(cmd, print_output=True)
+    print ("Finding program points")
+    ppts = find_ppts_that_establish_inv(test_dtrace, WORKING_DIR, test_inv_name)
+    print ("deleting temp files")
+    os.remove(test_inv_name+".class")
+    os.remove(test_inv_name+".java")
+    os.remove("test.inv.gz")
+    #output = run_daikon_on_dtrace_file(test_dtrace, checked_invariant="daikon.inv.unary.sequence.EltwiseIntLessThan")
+    #print output
+    #ppts = find_ppts_that_establish_inv_in_daikon_output(output, " sorted by ")
+    print ("Methods that establish FirstMuseInvariant:")
+    for ppt in ppts:
+      print ppt
 
 if __name__ == '__main__':
   main()
