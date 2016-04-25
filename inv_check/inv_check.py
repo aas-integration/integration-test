@@ -15,10 +15,8 @@ import common
 
 def run_daikon_on_dtrace_file(dtrace_file, classpath=daikon_jar, checked_invariant=None):
   cmd = ["java", "-classpath", classpath, "daikon.Daikon", dtrace_file]
-  if checked_invariant:
-    print ("DO SOMETHING")
+  if checked_invariant:    
     cmd += ["--disable-all-invariants", "--user-defined-invariant", checked_invariant]
-
   return common.run_cmd(cmd, print_output=True)
 
 
@@ -34,7 +32,8 @@ def find_ppts_that_establish_inv_in_daikon_output(daikon_output, inv_substring):
       ppt_name = lines[i]
       i+=1
       while (i<len(lines) and DAIKON_SPLITTER not in lines[i]):
-        if inv_substring in lines[i]:
+        if inv_substring in lines[i] and "return" in lines[i]:
+          # check if the invariant is established on the return var.
           ppts_with_inv+=[ppt_name]
         i+=1
     else:

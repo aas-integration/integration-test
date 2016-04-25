@@ -55,7 +55,7 @@ def add_project_to_corpus(project_dir):
   print "TODO" # Wenchao.
 
   """ run petablox """
-  run_petablox(project_dir)
+  #run_petablox(project_dir)
 
 
 def update_corpus_project(project_dir):
@@ -89,6 +89,9 @@ def get_dtrace_file_for_project(project):
     return dtrace_path
   else:
     return None
+
+def get_project_list():
+  return [get_project_dir(dir) for  dir in os.listdir(corpus_dir)]
 
 def main():
   for dir in os.listdir(corpus_dir):

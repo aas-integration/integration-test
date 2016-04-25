@@ -7,18 +7,10 @@ import insert_jaif
 import ontology_to_daikon
 
 import backend
-
+import common
 
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 daikon_jar = os.path.join(WORKING_DIR, "libs/daikon.jar") 
-
-
-def run_command(cmd):
-  print (" ".join(cmd))
-  try:
-    return subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-  except:
-    raise Exception('calling {cmd} failed\n{trace}'.format(cmd=' '.join(cmd),trace=traceback.format_exc()))
 
 
 def main():
@@ -78,13 +70,27 @@ def main():
   os.mkdir(pattern_class_dir)
 
   cmd = ["javac", "-g", "-classpath", daikon_jar, daikon_pattern_java_file, "-d", pattern_class_dir]
-  run_command(cmd)
+  common.run_cmd(cmd)
 
-  corpus = ["TODO"] #TODO: @Tim, add the real corpus here
+  corpus = backend.get_project_list() #TODO: @Tim, add the real corpus here
 
+  list_of_methods = []
   for project in corpus:
     dtrace_file = backend.get_dtrace_file_for_project(project)
-    list_of_methods = inv_check.find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name)
+    if not dtrace_file:
+      print ("Ignoring folder {} because it does not contain dtrace file".format(project))
+      continue
+    methods = inv_check.find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name)
+    list_of_methods +=[(project, methods)]
+
+  print ("\n   ************")
+  print ("The following corpus methods establish Howies invariant in the return value:")
+  for project, methods in list_of_methods:
+    if len(methods)>0:
+      print (project)
+      for m in methods:
+        print("\t{}".format(m))
+  print ("\n   ************")
 
   """ Expansion of dynamic analysis results .... 
   Find a list of similar methods that are similar to the ones found above (list_of_methods).
@@ -129,11 +135,11 @@ def main():
 
 
 
-if not os.path.isfile(daikon_jar):
-  print "Downloading dependencies"
-  cmd = ["./fetch_dependencies.sh"]
-  run_command(cmd)
-  print "Done."
+# if not os.path.isfile(daikon_jar):
+#   print "Downloading dependencies"
+#   cmd = ["./fetch_dependencies.sh"]
+#   run_command(cmd)
+#   print "Done."
 
 if __name__ == '__main__':
   main()
