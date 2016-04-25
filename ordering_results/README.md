@@ -19,7 +19,7 @@ returned by the graph similarity step.
 
 Additional feature:
 
-Included the ability to finds the k most frequent concepts in a corpus.
+Finds the k most frequent concepts in a corpus.
 
 *Input*:
 	 1. A list of method names to introspect
