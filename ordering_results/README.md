@@ -15,3 +15,16 @@ returned by the graph similarity step.
 
 
 *Assumption*: Source files in the corpus are syntactically correct (and hence compilable).
+
+
+Additional feature:
+
+Included the ability to finds the k most frequent concepts in a corpus.
+
+*Input*:
+	 1. A list of method names to introspect
+	 2. A *k* parameter
+	 3. The corpus
+	 
+*Output*:
+The *k* most frequent concepts in a corpus	 
