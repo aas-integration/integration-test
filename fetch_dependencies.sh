@@ -4,23 +4,29 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 pushd $DIR &> /dev/null
 
 mkdir -p libs
+pushd libs &> /dev/null
+
+JARS=(
+    "http://www.csl.sri.com/users/schaef/jars/daikon.jar"
+    "http://www.csl.sri.com/users/schaef/jars/randoop.jar"
+    "https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar"
+    "http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+    "https://github.com/petablox-project/petablox/releases/download/v1.0/petablox.zip"
+)
 # Download .jars
-if [ ! -e libs/daikon.jar ]; then
-    curl -L -o libs/daikon.jar "http://plse.cs.washington.edu/daikon/download/daikon.jar"
-fi
 
-if [ ! -e libs/randoop-2.1.4.jar ]; then
-    curl -L -o libs/randoop-2.1.4.jar "https://github.com/randoop/randoop/releases/download/v2.1.4/randoop-2.1.4.jar"
-fi
+for jar in "${JARS[@]}"
+do
+    base=$(basename $jar)
+    echo Fetching $base
+    curl -L -o $base $jar &> /dev/null
+done
 
-if [ ! -e libs/junit-4.12.jar ]; then
-    curl -L -o libs/junit-4.12.jar "https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar"
-fi
+# Unpack petablox
+unzip -o petablox.zip
+rm petablox.zip
 
-if [ ! -e libs/hamcrest-core-1.3.jar ]; then
-    curl -L -o libs/hamcrest-core-1.3.jar "http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
-fi
-
+popd &> /dev/null
 
 # Fetch do-like-javac
 if [ ! -d do-like-javac ]; then
