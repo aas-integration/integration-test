@@ -10,12 +10,14 @@ dljc_output_dir = "dljc-out"
 def get_project_dir(project_name):
   return os.path.join(corpus_dir, project_name)
 
-def run_dljc(project_dir):
+def clean_project(project_dir):
   with common.cd(project_dir):
     with open(os.path.join(project_dir, "clean_command.txt"), "r") as f:
       clean_command = f.readline().strip().split()
       common.run_cmd(clean_command)
 
+def run_dljc(project_dir):
+  with common.cd(project_dir):
     with open(os.path.join(project_dir, "build_command.txt"), "r") as f:
       build_command = f.readline().strip().split()
       dljc_command = [dljc,
@@ -26,11 +28,22 @@ def run_dljc(project_dir):
       dljc_command.extend(build_command)
       common.run_cmd(dljc_command)
 
+def run_petablox(project_dir):
+  with common.cd(project_dir):
+    petablox_cmd = ['java',
+                    '-cp', os.path.join(libs_dir, 'petablox.jar'),
+                    '-Dpetablox.reflect.kind=none',
+                    '-Dpetablox.run.analyses=cipa-0cfa-dlog',
+                    'petablox.project.Boot']
+    common.run_cmd(petablox_cmd)
+
 def add_project_to_corpus(project_dir):
   """ Assumes that the project_dir contains a
-  text file named TODO.TODO that contains the build command(s) for the
-  project in this directory.
+  text file named build_command.txt that contains the build command(s) for the
+  project in this directory, and a clean_command.txt that will clean the project.
   """
+
+  clean_project(project_dir)
 
   """ Run dljc """ #All Tim's stuff
   """ Run Randoop to generate test sources """
@@ -42,7 +55,7 @@ def add_project_to_corpus(project_dir):
   print "TODO" # Wenchao.
 
   """ run petablox """
-  print "TODO"
+  run_petablox(project_dir)
 
 
 def update_corpus_project(project_dir):
