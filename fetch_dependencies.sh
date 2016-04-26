@@ -8,7 +8,8 @@ pushd libs &> /dev/null
 
 JARS=(
     "http://www.csl.sri.com/users/schaef/jars/daikon.jar"
-    "http://www.csl.sri.com/users/schaef/jars/randoop.jar"
+    "https://www.dropbox.com/s/75bde1boz742oyt/randoop.jar"
+    "https://www.dropbox.com/s/i1iqgf9w7jk1x3x/prog2dfg.jar"
     "https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar"
     "http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
     "https://github.com/petablox-project/petablox/releases/download/v1.0/petablox.zip"

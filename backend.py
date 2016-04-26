@@ -21,8 +21,9 @@ def run_dljc(project_dir):
     with open(os.path.join(project_dir, "build_command.txt"), "r") as f:
       build_command = f.readline().strip().split()
       dljc_command = [dljc,
-                      "-t", "dyntrace",
+                      "-t", "dyntrace,graphtool",
                       "-o", dljc_output_dir,
+                      "--graph-jar", os.path.join(libs_dir, "prog2dfg.jar"),
                       "--dyntrace-libs", libs_dir,
                       "--"]
       dljc_command.extend(build_command)
