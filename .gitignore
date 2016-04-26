@@ -5,6 +5,7 @@
 
 libs/*
 do-like-javac
+tools
 
 dynamic_analysis/dljc/bin/__randoop_files/
 
