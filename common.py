@@ -42,6 +42,18 @@ def cd(newdir):
   finally:
     os.chdir(prevdir)
 
+def get_method(daikon_out):
+  arr1 = daikon_out.split('.')
+  arr2 = arr1[1].split(':::')
+  method = arr2[0]
+  return method
+
+def get_simprog():
+  return os.path.join(LIBS_DIR, 'simprog')
+
+def get_jar(jar_name):
+  return os.path.join(LIBS_DIR, jar_name)
+
 def get_project_dir(project_name):
   return os.path.join(CORPUS_DIR, project_name)
 
