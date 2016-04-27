@@ -46,7 +46,7 @@ def get_project_dir(project_name):
   return os.path.join(CORPUS_DIR, project_name)
 
 def get_project_list():
-  return [project for project in  os.listdir(corpus_dir) if os.path.isdir(get_project_dir(project))]
+  return [project for project in  os.listdir(CORPUS_DIR) if os.path.isdir(get_project_dir(project))]
 
 def clean_project(project):
   project_dir = get_project_dir(project)
