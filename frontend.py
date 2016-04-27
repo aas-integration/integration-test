@@ -11,14 +11,15 @@ def run_inference(project):
   project_dir = common.get_project_dir(project)
   annotation_dir = os.path.join(project_dir, common.DLJC_OUTPUT_DIR, 'annotations')
 
-  os.environ['JSR308'] = common.TOOLS_DIR
-  classpath = os.path.join(common.TOOLS_DIR, 'generic-type-inference-solver', 'bin')
+  jsr308 = common.TOOLS_DIR
+  os.environ['JSR308'] = jsr308
+  classpath = os.path.join(jsr308, 'generic-type-inference-solver', 'bin')
   if os.environ.get('CLASSPATH'):
     os.environ['CLASSPATH'] += ':' + classpath
   else:
     os.environ['CLASSPATH'] = classpath
 
-  afu = os.path.join(common.TOOLS_DIR, 'annotation-tools', 'annotation-file-utilities')
+  afu = os.path.join(jsr308, 'annotation-tools', 'annotation-file-utilities')
   os.environ['AFU'] = afu
   os.environ['PATH'] += ':' + os.path.join(afu, 'scripts')
 
@@ -29,7 +30,7 @@ def run_inference(project):
     common.clean_project(project)
     common.run_dljc(project,
                     ['inference'],
-                    ['--solverArgs=backendType=maxsatbackend.MaxSat',
+                    ['--solverArgs=backEndType=maxsatbackend.MaxSat',
                      '--checker', 'ontology.OntologyChecker',
                      '--solver', 'constraintsolver.ConstraintSolver',
                      '-m', 'ROUNDTRIP',
@@ -41,7 +42,7 @@ def main(corpus):
   types, and the concept of sorted sequence and the relevant type invariant.
   Goal: learn how to get from Sequence -> Sorted Sequence.
   """
-   
+
 
   """ Look for new mapping from 'ontology concepts'->'java type' and run
   checker framework. Should be implemented in type_inference
@@ -54,8 +55,8 @@ def main(corpus):
   BODY: This also triggers back-end labeled graph generation.
   """
 
-  # for project in corpus:
-  #   run_inference(project)
+  for project in corpus:
+    run_inference(project)
 
   """ Missing step: interact with PA to add a definition of Sorted Sequence
   which is a specialization of Sequence that has a sortedness invariants.
@@ -180,7 +181,7 @@ def main(corpus):
 #   print "Done."
 
 if __name__ == '__main__':
-  corpus = common.get_project_list()  
+  corpus = common.get_project_list()
   if len(sys.argv)>1:
     filtered_corpus = []
     for arg in sys.argv[1:]:
