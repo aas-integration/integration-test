@@ -102,7 +102,11 @@ def main(corpus):
     if not dtrace_file:
       print ("Ignoring folder {} because it does not contain dtrace file".format(project))
       continue
-    methods = inv_check.find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name)
+    ppt_names = inv_check.find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name)
+    methods = set()
+    for ppt in ppt_names:
+      method_name = ppt[:ppt.find(':::EXIT')]
+      methods.add(method_name)
     list_of_methods +=[(project, methods)]
 
   print ("\n   ************")
