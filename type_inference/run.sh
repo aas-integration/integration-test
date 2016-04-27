@@ -27,6 +27,9 @@ export TRAVIS_BUILD_DIR=`pwd`
 
 ./.travis-build-without-test.sh
 
+#TODO: generate sequence annotations and adapt OntologyUtils
+#recompile generic-type-inference-solver
+
 rm -rf $CORPUS_DIR/annotated/
 #infer all examples in corpus
 for f in $CORPUS_DIR/*
@@ -41,5 +44,3 @@ done
 
 # Sort03 causes checker framework inference crushing,
 # the problem has been filed as Issue #24 in checker framework inference.
-cd ..amework inference.
-cd ..
