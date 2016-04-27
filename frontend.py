@@ -164,7 +164,6 @@ def main(corpus):
 #   print "Done."
 
 if __name__ == '__main__':
-  print sys.argv
   corpus = common.get_project_list()  
   if len(sys.argv)>1:
     filtered_corpus = []
