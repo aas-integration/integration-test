@@ -9,13 +9,6 @@ TOOLS_DIR = os.path.join(WORKING_DIR, "tools")
 DLJC_BINARY = os.path.join(TOOLS_DIR, "do-like-javac", "dljc")
 DLJC_OUTPUT_DIR = "dljc-out"
 
-def jar_path(jar):
-  path = os.path.join(LIBS_DIR, jar)
-  if os.path.isfile(path):
-    return path
-  else:
-    return None
-
 def run_cmd(cmd, print_output=False):
   output = ""
   if print_output:
@@ -52,7 +45,11 @@ def get_simprog():
   return os.path.join(LIBS_DIR, 'simprog')
 
 def get_jar(jar_name):
-  return os.path.join(LIBS_DIR, jar_name)
+  path = os.path.join(LIBS_DIR, jar_name)
+  if os.path.isfile(path):
+    return path
+  else:
+    return None
 
 def get_project_dir(project_name):
   return os.path.join(CORPUS_DIR, project_name)

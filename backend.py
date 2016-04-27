@@ -4,7 +4,7 @@ import common
 def run_petablox(project):
   with common.cd(common.get_project_dir(project)):
     petablox_cmd = ['java',
-                    '-cp', common.jar_path('petablox.jar'),
+                    '-cp', common.get_jar('petablox.jar'),
                     '-Dpetablox.reflect.kind=none',
                     '-Dpetablox.run.analyses=cipa-0cfa-dlog',
                     'petablox.project.Boot']
@@ -25,14 +25,14 @@ def add_project_to_corpus(project):
   """
   common.run_dljc(project,
                   ['dyntrace', 'graphtool'],
-                  ['--graph-jar', common.jar_path('prog2dfg.jar'),
+                  ['--graph-jar', common.get_jar('prog2dfg.jar'),
                    '--dyntrace-libs', common.LIBS_DIR])
 
   """ run petablox """
   #run_petablox(project_dir)
 
   """ run graph kernel computation """
-  graph_kernel_cmd = ['python', 
+  graph_kernel_cmd = ['python',
                       os.path.join(common.get_simprog(), 'precompute_kernel.py'),
                       common.get_project_dir(project),
                       os.path.join(common.get_project_dir(project), common.DLJC_OUTPUT_DIR, '_classes', 'kernel.txt')
