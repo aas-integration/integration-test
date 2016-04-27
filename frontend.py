@@ -37,6 +37,69 @@ def run_inference(project):
                      '-m', 'ROUNDTRIP',
                      '-afud', annotation_dir])
 
+
+
+def read_jaif_file(jaif_file):
+  current_package = ""
+  current_class = ""
+  current_method = ""
+  with open(jaif_file, 'r') as f:
+    for line in f.readlines():
+      if line.startswith("package "):
+        current_package = line[len("package "):line.find(":")]
+      if line.startswith("method "):
+        current_class = line[len("class "):line.find(":")]
+      if line.startswith("method "):
+        current_method = line[len("method "):line.find(":")]
+
+      if line.startswith("insert-annotation Method.parameter"):
+        print ("YEAH {}{}".format(current_class, current_method))
+      if line.startswith("insert-annotation Method.type"):
+        print ("RET {}{}".format(current_class, current_method))
+
+
+
+def find_methods_with_signature(corpus, return_annotation, param_annotation_list):
+
+  good_methods = []
+
+  for project in corpus:
+    project_dir = common.get_project_dir(project)
+    jaif_file = os.path.join(project_dir, "default.jaif")
+  
+    has_param = False
+    has_ret = False
+    current_package = ""
+    current_class = ""
+    current_method = ""
+    with open(jaif_file, 'r') as f:
+      for line in f.readlines():
+        if line.startswith("package "):
+          current_package = line[len("package "):line.find(":")]
+        if line.startswith("class "):
+          current_class = line[len("class "):line.find(":")]
+          has_param = False
+          has_ret = False          
+        if line.startswith("method "):
+          current_method = line[len("method "):line.find(":")]
+
+        if line.startswith("insert-annotation Method.parameter"):
+          s = line[len("insert-annotation Method.parameter "):]
+          param_idx = int(s[:s.find(",")])
+          if len(param_annotation_list) > param_idx and param_annotation_list[param_idx] in line:
+            has_param = True
+          else: 
+            has_param = False
+        if line.startswith("insert-annotation Method.type") and return_annotation in line:
+          has_ret = True
+
+        if has_param==True and has_ret==True:
+          good_methods += [(project, current_package, current_class, current_method)]
+          print ("Relevant Method: {}.{}".format(current_class,current_method))
+          has_param = False
+          has_ret = False
+
+
 def main(corpus):
   """ SUMMARY: use case of the user-driven functionality of PASCALI.
   Scenario: User provides the concept of Sequence and the equivalent Java
@@ -224,3 +287,5 @@ if __name__ == '__main__':
     print ("Filtered corpus contianing: {}".format(','.join(filtered_corpus)))
     corpus = filtered_corpus
   main(corpus)
+  #find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])
+
