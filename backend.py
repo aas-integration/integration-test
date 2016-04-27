@@ -32,13 +32,16 @@ def add_project_to_corpus(project):
   #run_petablox(project_dir)
 
   """ run graph kernel computation """
+  project_dir = common.get_project_dir(project)
+  kernel_file_path = common.get_kernel_path(project)
   graph_kernel_cmd = ['python',
-                      os.path.join(common.get_simprog(), 'precompute_kernel.py'),
-                      common.get_project_dir(project),
-                      os.path.join(common.get_project_dir(project), common.DLJC_OUTPUT_DIR, '_classes', 'kernel.txt')
+                      common.get_simprog('precompute_kernel.py'),
+                      project_dir,
+                      kernel_file_path
                       ]
   common.run_cmd(graph_kernel_cmd)
   print 'Generated kernel file for {0}.'.format(project)
+  return kernel_file_path
 
 def update_corpus_project(project):
   """ This is triggered when new type annotations are being added either by
@@ -76,12 +79,15 @@ def get_dtrace_file_for_project(project):
     return None
 
 def main():
+  kf = open("corpus_kernel.txt", "w")
   for project in common.get_project_list():
     print "Analyzing {}".format(project)
-    add_project_to_corpus(project)
+    project_kernel_file = add_project_to_corpus(project)
+    with open(project_kernel_file, "r") as fi: kf.write(fi.read())
     dtrace = get_dtrace_file_for_project(project)
     if dtrace:
       print "Generated {}".format(dtrace)
+  kf.close()
 
 if __name__ == '__main__':
   main()

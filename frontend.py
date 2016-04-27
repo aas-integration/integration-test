@@ -127,13 +127,39 @@ def main(corpus):
   """
 
   # WENCHAO
-  print ("Expanding the dynamic analysis results using graph-based similarity:")
+  print ("Expanding the dynamic analysis results using graph-based similarity:")  
+  union_set = set()
   for project, methods in list_of_methods:
+    # map Daikon output on sort method to method signature in methods.txt in generated graphs
     for m in methods:
-      print(common.get_method(m))
-  # map Daikon output on sort method to method signature in methods.txt in generated graphs
+      method_name = common.get_method_from_daikon_out(m)
+      #kernel_file = common.get_kernel_path(project)
+      method_file = common.get_method_path(project)
+      dot_name = common.find_dot_name(method_name, method_file)
+      if dot_name:
+        # find the right dot file for each method
+        dot_file = common.get_dot_path(project, dot_name)
+        # find all graphs that are similar to it using WL based on some threshold
+        sys.path.insert(0, 'simprog')
+        from similarity import Similarity
+        sim = Similarity()
+        sim.read_graph_kernels("corpus_kernel.txt")
+        top_k = 3
+        iter_num = 3
+        result_program_list_with_score = sim.find_top_k_similar_graphs(dot_file, 'g', top_k, iter_num)
+        result_set = set([x[0] for x in result_program_list_with_score])
+        # take the union of all these graphs
+        union_set = union_set | result_set
+  print union_set
 
-
+  # return this set as a list of (project, method)
+  fo = open("methods.txt", "w")
+  expanded_list = []
+  for dot_path in union_set:
+    method_summary = common.get_method_summary_from_dot_path(dot_path)
+    fo.write(method_summary)
+    fo.write("\n")
+  fo.close()
 
   """ Update the type annotations for the expanded dynamic analysis results.
   INPUT: superset_list_of_methods, annotation to be added
