@@ -7,6 +7,7 @@ import ontology_to_daikon
 import backend
 import common
 
+
 def run_inference(project):
   project_dir = common.get_project_dir(project)
   annotation_dir = os.path.join(project_dir, common.DLJC_OUTPUT_DIR, 'annotations')
@@ -121,7 +122,14 @@ def main():
   OUTPUT: superset_list_of_methods
   """
 
-  print "todo" # WENCHAO
+  # WENCHAO
+  print ("Expanding the dynamic analysis results using graph-based similarity:")
+  for project, methods in list_of_methods:
+    for m in methods:
+      print(common.get_method(m))
+  # map Daikon output on sort method to method signature in methods.txt in generated graphs
+
+
 
   """ Update the type annotations for the expanded dynamic analysis results.
   INPUT: superset_list_of_methods, annotation to be added
