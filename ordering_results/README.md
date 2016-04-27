@@ -31,7 +31,37 @@ The *k* most frequent concepts in a corpus
 
 # Example
 
-The following command will compute the 2 most typical implementation of the methods specified in the methods.txt file. It will also extract the 2 most frequent concepts in those implementations.
+The following two commands demonstrates the typicality and concepts location components:
+
+Finds the 2 most typical implementation of the methods specified in the methods.txt:
+
+```
+› ./run.sh -k 2 -f ./methods.txt -t typicality
+```
+
+The output is:
+
+```
+Finds k most typical implementation in corpus.
+Sort03                           public class ....
+Sort14                           public class ....
+```
+
+Finds the 2 most frequent concepts in those implementations.
+
+```
+› ./run.sh -k 2 -f ./methods.txt -t concepts
+```
+
+The output is:
+
+```
+Extracts concepts from corpus.
+[sort, array]
+```
+
+
+Or, if you prefer running both components with one single command, then avoid using the `-t` argument and its value. E.g., the following command runs both typicality and concept location components:
 
 ```
 › ./run.sh -k 2 -f ./methods.txt
@@ -48,5 +78,4 @@ Exiting with Code 0
 Extracts concepts from corpus.
 [sort, array]
 ```
-
 
