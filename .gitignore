@@ -19,6 +19,7 @@ type_inference/do-like-javac/
 corpus/annotated/
 corpus/**/logs/
 **/*.jaif
+**/__java_file_names.txt
 
 TODO_*.*
 **/*.inv.gz

@@ -28,3 +28,25 @@ Finds the k most frequent concepts in a corpus.
 	 
 *Output*:
 The *k* most frequent concepts in a corpus	 
+
+# Example
+
+The following command will compute the 2 most typical implementation of the methods specified in the methods.txt file. It will also extract the 2 most frequent concepts in those implementations.
+
+```
+› ./run.sh -k 2 -f ./methods.txt
+```
+
+The output is:
+
+```
+Finds k most typical implementation in corpus.
+Sort03                           public class ....
+Sort14                           public class ....
+
+Exiting with Code 0
+Extracts concepts from corpus.
+[sort, array]
+```
+
+

@@ -12,7 +12,7 @@ public class Sort16 {
     }
   }
 
-  private static void sort(String[] fruits){
+  public static void sort(String[] fruits){
     Arrays.sort(fruits);
   }
 }

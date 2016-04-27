@@ -18,7 +18,7 @@ public class Sort15 {
     }
   }
 
-  private static void populateRoleList(RoleList libraryList){
+  public static void populateRoleList(RoleList libraryList){
     // building the owner Role
 	// ObjectName earExpression=new ObjectName
     List<ObjectName> ownerList = new ArrayList<ObjectName>();
