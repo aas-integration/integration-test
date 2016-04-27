@@ -251,13 +251,13 @@ def main(corpus):
 
   ordering_dir = os.path.join(common.WORKING_DIR, "ordering_results/")
   
+  methods_file = os.path.join(common.WORKING_DIR, 'methods.txt')
   with common.cd(ordering_dir):
     #TODO generate a proper relevant methods file.
-    relevant_methods_file = "methods.txt"
-    cmd = ["./cue",
-           "typical", 
+    cmd = ["./run.sh", 
            "-k", "3", 
-           "-f", relevant_methods_file]
+           "-t", "typicality",
+           "-f", methods_file]
     common.run_cmd(cmd, print_output=True)
 
   """
