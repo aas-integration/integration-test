@@ -210,6 +210,8 @@ def main(corpus):
         top_k = 3
         iter_num = 3
         result_program_list_with_score = sim.find_top_k_similar_graphs(dot_file, 'g', top_k, iter_num)
+        print(project+":")
+        print(result_program_list_with_score)
         result_set = set([x[0] for x in result_program_list_with_score])
         # take the union of all these graphs
         union_set = union_set | result_set
