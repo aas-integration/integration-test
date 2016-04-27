@@ -190,7 +190,7 @@ def main(corpus):
   """
 
   # WENCHAO
-  print ("Expanding the dynamic analysis results using graph-based similarity:")  
+  print("Expanding the dynamic analysis results using graph-based similarity:")  
   union_set = set()
   for project, methods in list_of_methods:
     # map Daikon output on sort method to method signature in methods.txt in generated graphs
@@ -213,7 +213,8 @@ def main(corpus):
         result_set = set([x[0] for x in result_program_list_with_score])
         # take the union of all these graphs
         union_set = union_set | result_set
-  print union_set
+  print("Expanded set:")
+  print([x.split('/')[-4] for x in union_set])
 
   # return this set as a list of (project, method)
   fo = open("methods.txt", "w")
