@@ -12,14 +12,15 @@ def run_inference(project):
   project_dir = common.get_project_dir(project)
   annotation_dir = os.path.join(project_dir, common.DLJC_OUTPUT_DIR, 'annotations')
 
-  os.environ['JSR308'] = common.TOOLS_DIR
-  classpath = os.path.join(common.TOOLS_DIR, 'generic-type-inference-solver', 'bin')
+  jsr308 = common.TOOLS_DIR
+  os.environ['JSR308'] = jsr308
+  classpath = os.path.join(jsr308, 'generic-type-inference-solver', 'bin')
   if os.environ.get('CLASSPATH'):
     os.environ['CLASSPATH'] += ':' + classpath
   else:
     os.environ['CLASSPATH'] = classpath
 
-  afu = os.path.join(common.TOOLS_DIR, 'annotation-tools', 'annotation-file-utilities')
+  afu = os.path.join(jsr308, 'annotation-tools', 'annotation-file-utilities')
   os.environ['AFU'] = afu
   os.environ['PATH'] += ':' + os.path.join(afu, 'scripts')
 
@@ -30,7 +31,7 @@ def run_inference(project):
     common.clean_project(project)
     common.run_dljc(project,
                     ['inference'],
-                    ['--solverArgs=backendType=maxsatbackend.MaxSat',
+                    ['--solverArgs=backEndType=maxsatbackend.MaxSat',
                      '--checker', 'ontology.OntologyChecker',
                      '--solver', 'constraintsolver.ConstraintSolver',
                      '-m', 'ROUNDTRIP',
@@ -42,7 +43,7 @@ def main(corpus):
   types, and the concept of sorted sequence and the relevant type invariant.
   Goal: learn how to get from Sequence -> Sorted Sequence.
   """
-   
+
 
   """ Look for new mapping from 'ontology concepts'->'java type' and run
   checker framework. Should be implemented in type_inference
@@ -55,8 +56,8 @@ def main(corpus):
   BODY: This also triggers back-end labeled graph generation.
   """
 
-  # for project in corpus:
-  #   run_inference(project)
+  for project in corpus:
+    run_inference(project)
 
   """ Missing step: interact with PA to add a definition of Sorted Sequence
   which is a specialization of Sequence that has a sortedness invariants.
@@ -103,7 +104,11 @@ def main(corpus):
     if not dtrace_file:
       print ("Ignoring folder {} because it does not contain dtrace file".format(project))
       continue
-    methods = inv_check.find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name)
+    ppt_names = inv_check.find_ppts_that_establish_inv(dtrace_file, pattern_class_dir, pattern_class_name)
+    methods = set()
+    for ppt in ppt_names:
+      method_name = ppt[:ppt.find(':::EXIT')]
+      methods.add(method_name)
     list_of_methods +=[(project, methods)]
 
   print ("\n   ************")
@@ -151,7 +156,19 @@ def main(corpus):
   Note: similarity score is used. may consider using other scores; e.g., TODO:???
   """
 
-  print "todo" # Huascar
+  #TODO: create input file for huascar where each line is formatted like:
+  # ../corpus/Sort05/src/Sort05.java::sort(int[]):int[]
+
+  ordering_dir = os.path.join(common.WORKING_DIR, "ordering_results/")
+  
+  with common.cd(ordering_dir):
+    #TODO generate a proper relevant methods file.
+    relevant_methods_file = "methods.txt"
+    cmd = ["./cue",
+           "typical", 
+           "-k", "3", 
+           "-f", relevant_methods_file]
+    common.run_cmd(cmd, print_output=True)
 
   """
   Close the loop and add the best implementation found in the previous
@@ -172,7 +189,7 @@ def main(corpus):
 #   print "Done."
 
 if __name__ == '__main__':
-  corpus = common.get_project_list()  
+  corpus = common.get_project_list()
   if len(sys.argv)>1:
     filtered_corpus = []
     for arg in sys.argv[1:]:
