@@ -147,7 +147,19 @@ def main(corpus):
   Note: similarity score is used. may consider using other scores; e.g., TODO:???
   """
 
-  print "todo" # Huascar
+  #TODO: create input file for huascar where each line is formatted like:
+  # ../corpus/Sort05/src/Sort05.java::sort(int[]):int[]
+
+  ordering_dir = os.path.join(common.WORKING_DIR, "ordering_results/")
+  
+  with common.cd(ordering_dir):
+    #TODO generate a proper relevant methods file.
+    relevant_methods_file = "methods.txt"
+    cmd = ["./cue",
+           "typical", 
+           "-k", "3", 
+           "-f", relevant_methods_file]
+    common.run_cmd(cmd, print_output=True)
 
   """
   Close the loop and add the best implementation found in the previous
