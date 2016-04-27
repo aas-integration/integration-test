@@ -1,4 +1,4 @@
-import os, shutil
+import sys, os, shutil
 
 import inv_check
 import insert_jaif
@@ -35,14 +35,13 @@ def run_inference(project):
                      '-m', 'ROUNDTRIP',
                      '-afud', annotation_dir])
 
-def main():
+def main(corpus):
   """ SUMMARY: use case of the user-driven functionality of PASCALI.
   Scenario: User provides the concept of Sequence and the equivalent Java
   types, and the concept of sorted sequence and the relevant type invariant.
   Goal: learn how to get from Sequence -> Sorted Sequence.
   """
-
-  corpus = common.get_project_list()
+   
 
   """ Look for new mapping from 'ontology concepts'->'java type' and run
   checker framework. Should be implemented in type_inference
@@ -165,4 +164,13 @@ def main():
 #   print "Done."
 
 if __name__ == '__main__':
-  main()
+  print sys.argv
+  corpus = common.get_project_list()  
+  if len(sys.argv)>1:
+    filtered_corpus = []
+    for arg in sys.argv[1:]:
+      if arg in corpus:
+        filtered_corpus += [arg]
+    print ("Filtered corpus contianing: {}".format(','.join(filtered_corpus)))
+    corpus = filtered_corpus
+  main(corpus)
