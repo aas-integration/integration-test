@@ -3,26 +3,30 @@ import sys, os, shutil
 import inv_check
 import insert_jaif
 import ontology_to_daikon
+import pa2checker
 
 import backend
 import common
 
+def run_pa2checker(annotations):
+  pa2checker.revert_checker_source()
+
+  for annotation, classes in annotations.iteritems():
+    pa2checker.create_type_annotation(annotation)
+    pa2checker.update_ontology_utils(annotation, classes)
+    pa2checker.recompile_checker_framework()
 
 def run_inference(project):
-  project_dir = common.get_project_dir(project)
-  annotation_dir = os.path.join(project_dir, common.DLJC_OUTPUT_DIR, 'annotations')
+  common.setup_checker_framework_env()
 
-  jsr308 = common.TOOLS_DIR
-  os.environ['JSR308'] = jsr308
-  classpath = os.path.join(jsr308, 'generic-type-inference-solver', 'bin')
+  classpath = os.path.join(os.environ['JSR308'], 'generic-type-inference-solver', 'bin')
   if os.environ.get('CLASSPATH'):
     os.environ['CLASSPATH'] += ':' + classpath
   else:
     os.environ['CLASSPATH'] = classpath
 
-  afu = os.path.join(jsr308, 'annotation-tools', 'annotation-file-utilities')
-  os.environ['AFU'] = afu
-  os.environ['PATH'] += ':' + os.path.join(afu, 'scripts')
+  project_dir = common.get_project_dir(project)
+  annotation_dir = os.path.join(project_dir, common.DLJC_OUTPUT_DIR, 'annotations')
 
   if os.path.isdir(annotation_dir):
     shutil.rmtree(annotation_dir)
@@ -38,15 +42,13 @@ def run_inference(project):
                      '-afud', annotation_dir])
 
 
-
-
 def find_methods_with_signature(corpus, return_annotation, param_annotation_list):
   good_methods = []
 
   for project in corpus:
     project_dir = common.get_project_dir(project)
     jaif_file = os.path.join(project_dir, "default.jaif")
-  
+
     has_param = False
     has_ret = False
     current_package = ""
@@ -61,14 +63,14 @@ def find_methods_with_signature(corpus, return_annotation, param_annotation_list
         if line.startswith("method "):
           current_method = line[len("method "):line.find(":")]
           has_param = False
-          has_ret = False          
+          has_ret = False
 
         if line.startswith("insert-annotation Method.parameter"):
           s = line[len("insert-annotation Method.parameter "):]
           param_idx = int(s[:s.find(",")])
           if len(param_annotation_list) > param_idx and param_annotation_list[param_idx] in line:
             has_param = True
-          elif param_idx!=0: 
+          elif param_idx!=0:
             has_param = False
         if line.startswith("insert-annotation Method.type") and return_annotation in line:
           has_ret = True
@@ -80,13 +82,18 @@ def find_methods_with_signature(corpus, return_annotation, param_annotation_list
           has_ret = False
 
 
-def main(corpus):
+def main(corpus, annotations):
   """ SUMMARY: use case of the user-driven functionality of PASCALI.
   Scenario: User provides the concept of Sequence and the equivalent Java
   types, and the concept of sorted sequence and the relevant type invariant.
   Goal: learn how to get from Sequence -> Sorted Sequence.
   """
 
+  """
+  INPUT: annotations, dictionary mapping string -> list of strings
+  OUTPUT: recompiles generic-inference-solver with new annotations"""
+
+  run_pa2checker(annotations)
 
   """ Look for new mapping from 'ontology concepts'->'java type' and run
   checker framework. Should be implemented in type_inference
@@ -172,7 +179,7 @@ def main(corpus):
   """
 
   # WENCHAO
-  print("Expanding the dynamic analysis results using graph-based similarity:")  
+  print("Expanding the dynamic analysis results using graph-based similarity:")
   union_set = set()
   for project, methods in list_of_methods:
     # map Daikon output on sort method to method signature in methods.txt in generated graphs
@@ -234,12 +241,12 @@ def main(corpus):
   # ../corpus/Sort05/src/Sort05.java::sort(int[]):int[]
 
   ordering_dir = os.path.join(common.WORKING_DIR, "ordering_results/")
-  
+
   methods_file = os.path.join(common.WORKING_DIR, 'methods.txt')
   with common.cd(ordering_dir):
     #TODO generate a proper relevant methods file.
-    cmd = ["./run.sh", 
-           "-k", "3", 
+    cmd = ["./run.sh",
+           "-k", "3",
            "-t", "typicality",
            "-f", methods_file]
     common.run_cmd(cmd, print_output=True)
@@ -271,6 +278,7 @@ if __name__ == '__main__':
         filtered_corpus += [arg]
     print ("Filtered corpus contianing: {}".format(','.join(filtered_corpus)))
     corpus = filtered_corpus
-  main(corpus)
-  #find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])
 
+  annotations = { "Sequence": ['java.util.List', 'java.util.LinkedHashSet'] }
+  main(corpus, annotations)
+  #find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])

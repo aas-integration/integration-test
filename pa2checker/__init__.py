@@ -1,2 +1,6 @@
 import pa2checker
 
+create_type_annotation = pa2checker.create_type_annotation
+update_ontology_utils = pa2checker.update_ontology_utils
+recompile_checker_framework = pa2checker.recompile_checker_framework
+revert_checker_source = pa2checker.revert_checker_source

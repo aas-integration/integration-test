@@ -74,7 +74,7 @@ def get_method_summary_from_dot_path(dot_path):
   sourceline_arr = dot_dir + ["sourcelines.txt"]
   sourceline_file = os.path.join("/", *sourceline_arr)
   mf = open(method_file, "r")
-  sf = open(sourceline_file, "r")  
+  sf = open(sourceline_file, "r")
   dot_to_method_dict = {}
   method_to_source_dict = {}
   for line in mf:
@@ -91,7 +91,7 @@ def get_method_summary_from_dot_path(dot_path):
     source_file_name = arr[1]
     method_to_source_dict[method_sig] = source_file_name
   sf.close()
-  
+
   method_sig = dot_to_method_dict[dot_name]
   source_file = method_to_source_dict[method_sig]
   source_path = os.path.join("/", *(proj_dir + ["src", source_file]))
@@ -133,3 +133,18 @@ def run_dljc(project, tools, options=[]):
       dljc_command.append('--')
       dljc_command.extend(build_command)
       run_cmd(dljc_command, print_output=True)
+
+
+CHECKER_ENV_SETUP = False
+def setup_checker_framework_env():
+  global CHECKER_ENV_SETUP
+  if CHECKER_ENV_SETUP:
+    return
+
+  jsr308 = TOOLS_DIR
+  os.environ['JSR308'] = jsr308
+
+  afu = os.path.join(jsr308, 'annotation-tools', 'annotation-file-utilities')
+  os.environ['AFU'] = afu
+  os.environ['PATH'] += ':' + os.path.join(afu, 'scripts')
+  CHECKER_ENV_SETUP = True
