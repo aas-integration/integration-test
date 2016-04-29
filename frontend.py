@@ -39,28 +39,8 @@ def run_inference(project):
 
 
 
-def read_jaif_file(jaif_file):
-  current_package = ""
-  current_class = ""
-  current_method = ""
-  with open(jaif_file, 'r') as f:
-    for line in f.readlines():
-      if line.startswith("package "):
-        current_package = line[len("package "):line.find(":")]
-      if line.startswith("method "):
-        current_class = line[len("class "):line.find(":")]
-      if line.startswith("method "):
-        current_method = line[len("method "):line.find(":")]
-
-      if line.startswith("insert-annotation Method.parameter"):
-        print ("YEAH {}{}".format(current_class, current_method))
-      if line.startswith("insert-annotation Method.type"):
-        print ("RET {}{}".format(current_class, current_method))
-
-
 
 def find_methods_with_signature(corpus, return_annotation, param_annotation_list):
-
   good_methods = []
 
   for project in corpus:
@@ -78,17 +58,17 @@ def find_methods_with_signature(corpus, return_annotation, param_annotation_list
           current_package = line[len("package "):line.find(":")]
         if line.startswith("class "):
           current_class = line[len("class "):line.find(":")]
-          has_param = False
-          has_ret = False          
         if line.startswith("method "):
           current_method = line[len("method "):line.find(":")]
+          has_param = False
+          has_ret = False          
 
         if line.startswith("insert-annotation Method.parameter"):
           s = line[len("insert-annotation Method.parameter "):]
           param_idx = int(s[:s.find(",")])
           if len(param_annotation_list) > param_idx and param_annotation_list[param_idx] in line:
             has_param = True
-          else: 
+          elif param_idx!=0: 
             has_param = False
         if line.startswith("insert-annotation Method.type") and return_annotation in line:
           has_ret = True
@@ -289,6 +269,6 @@ if __name__ == '__main__':
         filtered_corpus += [arg]
     print ("Filtered corpus contianing: {}".format(','.join(filtered_corpus)))
     corpus = filtered_corpus
-  main(corpus)
-  #find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])
+  #main(corpus)
+  find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])
 

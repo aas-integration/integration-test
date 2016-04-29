@@ -1,5 +1,5 @@
 
-import sys, os
+import sys, os, shutil
 import subprocess
 import traceback
 import urllib
@@ -76,16 +76,27 @@ def update_ontology_utils(annotation_name, java_type_names):
           out_file.write("         }\n")
 
         out_file.write(line)
+  
+  shutil.copyfile("lala.java", qualified_annotation_name)
 
-
-
+def recompile_checker_framework():
+  type_infer_tool_dir = os.path.join(common.TOOLS_DIR, "checker-framework-inference")
+  with common.cd(type_infer_tool_dir):
+    jsr308 = common.TOOLS_DIR
+    os.environ['JSR308'] = jsr308
+    afu = os.path.join(jsr308, 'annotation-tools', 'annotation-file-utilities')
+    os.environ['AFU'] = afu
+    os.environ['PATH'] += ':' + os.path.join(afu, 'scripts')
+    common.run_cmd(["gradle", "dist", "-i"], print_output=True)
+  
 
 def main():
   with common.cd(WORKING_DIR):
     annotation = "Disco"
     create_type_annotation(annotation)
     update_ontology_utils(annotation, ["java.util.Collection", "java.util.LinkedList"])
-
+    recompile_checker_framework()
+      
 
 if __name__ == '__main__':
   main()
