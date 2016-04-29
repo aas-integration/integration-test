@@ -47,7 +47,7 @@ else
 fi
 
 if [ ! -d "generic-type-inference-solver" ]; then
-    git clone https://github.com/Jianchu/generic-type-inference-solver.git
+    git clone https://github.com/pascaliUWat/generic-type-inference-solver.git
 fi
 
 pushd generic-type-inference-solver &> /dev/null

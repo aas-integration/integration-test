@@ -163,6 +163,8 @@ def main(corpus):
         print("\t{}".format(m))
   print ("\n   ************")
 
+  shutil.rmtree(pattern_class_dir)
+
   """ Expansion of dynamic analysis results ....
   Find a list of similar methods that are similar to the ones found above (list_of_methods).
   INPUT: list_of_methods, corpus with labeled graphs generated, threshold value for similarity,
@@ -269,6 +271,6 @@ if __name__ == '__main__':
         filtered_corpus += [arg]
     print ("Filtered corpus contianing: {}".format(','.join(filtered_corpus)))
     corpus = filtered_corpus
-  #main(corpus)
-  find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])
+  main(corpus)
+  #find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])
 

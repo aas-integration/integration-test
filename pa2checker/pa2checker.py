@@ -78,6 +78,7 @@ def update_ontology_utils(annotation_name, java_type_names):
         out_file.write(line)
   
   shutil.copyfile("lala.java", qualified_annotation_name)
+  os.remove("lala.java")
 
 def recompile_checker_framework():
   type_infer_tool_dir = os.path.join(common.TOOLS_DIR, "checker-framework-inference")
