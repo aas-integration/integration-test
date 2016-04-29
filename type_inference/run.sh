@@ -12,7 +12,7 @@ DLJC=$JSR308/do-like-javac
 if [ -d "generic-type-inference-solver" ]; then
   (cd generic-type-inference-solver && git pull)
 else
-  git clone https://github.com/Jianchu/generic-type-inference-solver.git
+  git clone https://github.com/pascaliUWat/generic-type-inference-solver.git
 fi
 
 if [ -d "do-like-javac" ]; then
