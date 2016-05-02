@@ -43,6 +43,10 @@ def run_inference(project):
 
 
 def find_methods_with_signature(corpus, return_annotation, param_annotation_list):
+  """ Finds all methods the corpus that have an annotation 'return_annotation' on the
+  return value and the parameters annotated with 'param_annotation_list'
+  OUTPUT: List of tuples (project, package, class, method)
+  """
   good_methods = []
 
   for project in corpus:
@@ -65,21 +69,27 @@ def find_methods_with_signature(corpus, return_annotation, param_annotation_list
           has_param = False
           has_ret = False
 
-        if line.startswith("insert-annotation Method.parameter"):
-          s = line[len("insert-annotation Method.parameter "):]
-          param_idx = int(s[:s.find(",")])
-          if len(param_annotation_list) > param_idx and param_annotation_list[param_idx] in line:
-            has_param = True
-          elif param_idx!=0:
-            has_param = False
-        if line.startswith("insert-annotation Method.type") and return_annotation in line:
+        if param_annotation_list!=None:
+          if line.startswith("insert-annotation Method.parameter"):
+            s = line[len("insert-annotation Method.parameter "):]
+            param_idx = int(s[:s.find(",")])
+            if len(param_annotation_list) > param_idx and param_annotation_list[param_idx] in line:
+              has_param = True
+            elif len(param_annotation_list) <= param_idx:
+              has_param = False
+        else:
+          hase_param = True
+        if return_annotation != None:
+          if line.startswith("insert-annotation Method.type") and return_annotation in line:
+            has_ret = True
+        else:
           has_ret = True
-
         if has_param==True and has_ret==True:
           good_methods += [(project, current_package, current_class, current_method)]
           print ("Relevant Method: {}.{}".format(current_class,current_method))
           has_param = False
           has_ret = False
+  return good_methods
 
 
 def main(corpus, annotations):
@@ -101,8 +111,8 @@ def main(corpus, annotations):
     Sequence -> java.lang.Array, java.util.List, LinkedHashSet, etc.
 
   INPUT: corpus, file containing set of concept->java_type mapping
-  OUTPUT: Set of jaif files that are merged into the classes using
-          insert_jaif.
+  OUTPUT: Set of jaif files that are merged into the classes. The jaif files are
+          stored as default.jaif in each project's directory.
   BODY: This also triggers back-end labeled graph generation.
   """
 
@@ -117,13 +127,30 @@ def main(corpus, annotations):
 
   """
 
+  ordering_operator = "<="
+
   ontology_invariant_file = "TODO_from_Howie.txt"
   with open(ontology_invariant_file, 'w') as f:
-    f.write("TODO")
+    f.write(ordering_operator)
 
   invariant_name = "TODO_sorted_sequence"
 
   daikon_pattern_java_file = ontology_to_daikon.create_daikon_invariant(ontology_invariant_file, invariant_name)
+
+
+  """ Find all methods that have one input parameter annotated as Sequence and return a variable also
+  annotated as Sequence.
+  INPUT: The corpus and the desired annotations on the method signature
+  OUTPUT: List of methods that have the desired signature.
+  NOTE: This is a stub and will be implemented as LB query in the future.
+  """
+  sig_methods = find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])
+  print ("\n   ************")
+  print ("The following corpus methods have the signature Sequence->Sequence {}:")
+  for (project, package, clazz, method) in sig_methods:
+    print("{}:\t{}.{}.{}".format(project, package, clazz, method))
+  print ("\n   ************")
+
 
   """ Search for methods that have a return type annotated with Sequence
   and for which we can establish a sortedness invariant (may done by LB).
@@ -162,7 +189,7 @@ def main(corpus, annotations):
     list_of_methods +=[(project, methods)]
 
   print ("\n   ************")
-  print ("The following corpus methods establish Howies invariant in the return value:")
+  print ("The following corpus methods return a sequence sorted by {}:".format(ordering_operator))
   for project, methods in list_of_methods:
     if len(methods)>0:
       print (project)
@@ -281,4 +308,3 @@ if __name__ == '__main__':
 
   annotations = { "Sequence": ['java.util.List', 'java.util.LinkedHashSet'] }
   main(corpus, annotations)
-  #find_methods_with_signature(corpus, "@ontology.qual.Sequence", ["@ontology.qual.Sequence"])

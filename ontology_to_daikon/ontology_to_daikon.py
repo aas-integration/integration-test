@@ -18,13 +18,19 @@ def create_daikon_invariant(ontology_invariant_file, invariant_name):
 
   pattern_java_file_name = "./"+invariant_name+".java"
 
+  operator = "<="
   with open(ontology_invariant_file, 'r') as in_file:
     #TODO: do something meaningful here.
+    for line in in_file.readlines():
+      operator = line.strip()
+      break
     pass
 
   with open(pattern_java_file_name, 'w') as out_file:
     with open(os.path.join(WORKING_DIR, "invariant.java.prototype"), 'r') as proto_file:
       for line in proto_file.readlines():
+        if "$OPERATOR$" in line:
+          line = line.replace("$OPERATOR$", operator)
         out_file.write(line.replace("$INVARIANT_NAME$", invariant_name))
 
   return pattern_java_file_name

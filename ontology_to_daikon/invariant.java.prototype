@@ -37,7 +37,7 @@ public class $INVARIANT_NAME$ extends SingleScalarSequence {
   @Override
   public InvariantStatus check_modified(long[] a, int count) {
     for (int i=1; i<a.length; i++) {
-      if (!((a[i-1]) <= ( a[i]))) {
+      if (!((a[i-1]) $OPERATOR$ ( a[i]))) {
         return InvariantStatus.FALSIFIED;
       }
     }
