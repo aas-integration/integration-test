@@ -22,11 +22,11 @@ This downloads all the jars, compiles stuff, etc. Only needs to be run once.
 
 Compiles the corpus projects, generates tests and dtrace files, computes dot files, runs petablox.
 
-    python forntend.py
+    python frontend.py
 
 or
 
-    python forntend.py Sort04 Sort15
+    python frontend.py Sort04 Sort15
 
 runs the main loop over the corpus, or the subset of corpus programs specified in the args.
 
