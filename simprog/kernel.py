@@ -2,7 +2,18 @@ import os, sys
 import logging
 from collections import defaultdict
 
-import networkx as nx
+import pip
+
+try:
+	import pydotplus
+except ImportError:
+	pip.main(['install', 'pydotplus'])
+
+try:
+	import networkx as nx
+except ImportError:
+	pip.main(['install', 'networkx==1.10'])
+	import networkx as nx
 
 __author__ = 'Wenchao Li'
 
