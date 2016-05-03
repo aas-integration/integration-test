@@ -30,9 +30,9 @@ rm petablox.zip
 popd &> /dev/null # Exit libs
 
 # get setuptools and pip
-echo Install setuptools and pip
-curl https://bootstrap.pypa.io/ez_setup.py -o - | python
-curl https://bootstrap.pypa.io/get-pip.py -o - | python
+#echo Install setuptools and pip
+#curl https://bootstrap.pypa.io/ez_setup.py -o - | python
+#curl https://bootstrap.pypa.io/get-pip.py -o - | python
 
 # Tools
 mkdir -p tools
