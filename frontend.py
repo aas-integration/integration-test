@@ -219,10 +219,10 @@ def main(corpus, annotations):
         # find the right dot file for each method
         dot_file = common.get_dot_path(project, dot_name)
         # find all graphs that are similar to it using WL based on some threshold
-        sys.path.insert(0, 'simprog')
+        sys.path.append(os.path.join(common.WORKING_DIR, 'simprog'))
         from similarity import Similarity
         sim = Similarity()
-        sim.read_graph_kernels("corpus_kernel.txt")
+        sim.read_graph_kernels(os.path.join(common.WORKING_DIR, "corpus_kernel.txt"))
         top_k = 3
         iter_num = 3
         result_program_list_with_score = sim.find_top_k_similar_graphs(dot_file, 'g', top_k, iter_num)
@@ -313,4 +313,4 @@ if __name__ == '__main__':
         annotations[pair[0]] += [pair[1]]
     print (annotations)
 
-  main(corpus, annotations)
+  main(["Sort01"], annotations)
