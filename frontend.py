@@ -104,7 +104,7 @@ def main(corpus, annotations):
   OUTPUT: recompiles generic-inference-solver with new annotations"""
 
   run_pa2checker(annotations)
-  return
+
   """ Look for new mapping from 'ontology concepts'->'java type' and run
   checker framework. Should be implemented in type_inference
   Mapping example:
