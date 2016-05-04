@@ -298,13 +298,19 @@ def main(corpus, annotations):
 
 if __name__ == '__main__':
   corpus = common.get_project_list()
-  if len(sys.argv)>1:
-    filtered_corpus = []
-    for arg in sys.argv[1:]:
-      if arg in corpus:
-        filtered_corpus += [arg]
-    print ("Filtered corpus contianing: {}".format(','.join(filtered_corpus)))
-    corpus = filtered_corpus
-
   annotations = { "Sequence": ['java.util.List', 'java.util.LinkedHashSet'] }
+  if len(sys.argv)>1:
+    annotations_file = sys.argv[1]
+    with open(annotations_file, 'r') as f:
+      annotations.clear()
+      for line in f.readlines():
+        pair = [x.strip() for x in line.split(',')]
+        if len(pair)!=2:
+          print ("Ignoring {}".format(line))
+          continue;
+        if pair[0] not in annotations:
+          annotations[pair[0]] = []
+        annotations[pair[0]] += [pair[1]]
+    print (annotations)
+
   main(corpus, annotations)
