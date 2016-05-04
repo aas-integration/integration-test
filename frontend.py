@@ -14,7 +14,7 @@ def run_pa2checker(annotations):
   for annotation, classes in annotations.iteritems():
     pa2checker.create_type_annotation(annotation)
     pa2checker.update_ontology_utils(annotation, classes)
-    pa2checker.recompile_checker_framework()
+  pa2checker.recompile_checker_framework()
 
 def run_inference(project):
   common.setup_checker_framework_env()
@@ -104,7 +104,7 @@ def main(corpus, annotations):
   OUTPUT: recompiles generic-inference-solver with new annotations"""
 
   run_pa2checker(annotations)
-
+  return
   """ Look for new mapping from 'ontology concepts'->'java type' and run
   checker framework. Should be implemented in type_inference
   Mapping example:
@@ -286,7 +286,7 @@ def main(corpus, annotations):
   found in the corpus as a blob to the ontology. Best case: generate an equivalent
   flow-graph in the ontology.
   """
-  print "TODO" # ALL
+  #print "TODO" # ALL
 
 
 

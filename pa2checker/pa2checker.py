@@ -17,6 +17,7 @@ def create_type_annotation(annotation_name, super_type_names=['OntologyTop']):
   annotation_file_dir = os.path.join(SOLVER_SRC_DIR, 'qual')
   annotation_file_name = os.path.join(annotation_file_dir, '{}.java'.format(annotation_name))
 
+  print ("Writing annotation {} to file {}".format(annotation_name, annotation_file_name))
   #first generate the definition of the annotation
   with open(annotation_file_name, 'w') as out_file:
     with open(os.path.join(WORKING_DIR, "annotation.java.prototype"), 'r') as proto_file:
