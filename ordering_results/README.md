@@ -41,11 +41,15 @@ Finds the 2 most typical implementation of the methods specified in the methods.
 
 The output is:
 
+../corpus/Sort05/src/Sort05.java::sort(int[]):int[]
 ```
 Finds k most typical implementation in corpus.
-Sort03                           public class ....
-Sort14                           public class ....
+../corpus/Sort03/src/Sort03
+../corpus/Sort14/src/Sort14
 ```
+
+**Note**: A file called `typicalset.txt` will be produced after executing the above command. This file
+will contain the method of interest per returned source file. 
 
 Finds the 2 most frequent concepts in those implementations.
 
@@ -71,8 +75,8 @@ The output is:
 
 ```
 Finds k most typical implementation in corpus.
-Sort03                           public class ....
-Sort14                           public class ....
+../corpus/Sort03/src/Sort03
+../corpus/Sort14/src/Sort14
 
 Exiting with Code 0
 Extracts concepts from corpus.
