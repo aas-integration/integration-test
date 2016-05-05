@@ -313,4 +313,4 @@ if __name__ == '__main__':
         annotations[pair[0]] += [pair[1]]
     print (annotations)
 
-  main(["Sort01"], annotations)
+  main(corpus, annotations)
