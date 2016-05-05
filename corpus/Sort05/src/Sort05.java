@@ -5,7 +5,7 @@ public class Sort05 {
 
 	public static void main(String[] args) {		
 		int[] arr1 = {10,34,2,56,7,67,88,42};
-		int[] arr2 = sort(arr1);
+		int[] arr2 = bs(arr1);
 		for(int i:arr2){
 		   System.out.print(i);
 		   System.out.print(", ");
@@ -13,7 +13,7 @@ public class Sort05 {
 	}
 	
 	// bucket sort
-    public static int[] sort(int[] array){
+    public static int[] bs(int[] array){
 	  int N = array.length;	
 		
       if(N <= 0) return array;   

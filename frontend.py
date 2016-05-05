@@ -92,7 +92,7 @@ def find_methods_with_signature(corpus, return_annotation, param_annotation_list
   return good_methods
 
 
-def main(corpus, annotations):
+def main(corpus, annotations, limit=3):
   """ SUMMARY: use case of the user-driven functionality of PASCALI.
   Scenario: User provides the concept of Sequence and the equivalent Java
   types, and the concept of sorted sequence and the relevant type invariant.
@@ -273,7 +273,7 @@ def main(corpus, annotations):
   with common.cd(ordering_dir):
     #TODO generate a proper relevant methods file.
     cmd = ["./run.sh",
-           "-k", "3",
+           "-k", "{}".format(limit),
            "-t", "typicality",
            "-f", methods_file]
     common.run_cmd(cmd, print_output=True)
@@ -299,8 +299,11 @@ def main(corpus, annotations):
 if __name__ == '__main__':
   corpus = common.get_project_list()
   annotations = { "Sequence": ['java.util.List', 'java.util.LinkedHashSet'] }
+  top_k = 3 
   if len(sys.argv)>1:
     annotations_file = sys.argv[1]
+    if len(sys.argv)>2:
+      top_k = sys.argv[2]
     with open(annotations_file, 'r') as f:
       annotations.clear()
       for line in f.readlines():
@@ -313,4 +316,4 @@ if __name__ == '__main__':
         annotations[pair[0]] += [pair[1]]
     print (annotations)
 
-  main(corpus, annotations)
+  main(corpus, annotations, limit=top_k)
