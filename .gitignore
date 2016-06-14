@@ -21,6 +21,9 @@ corpus/**/logs/
 **/*.jaif
 **/__java_file_names.txt
 
+# Pycharm
+.idea/*
+
 TODO_*.*
 **/*.inv.gz
 invClass/

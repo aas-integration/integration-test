@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-pushd $DIR &> /dev/null
+pushd ${DIR} &> /dev/null
 
 # Libraries
 mkdir -p libs
@@ -9,7 +9,7 @@ pushd libs &> /dev/null
 
 JARS=(
     "http://www.csl.sri.com/users/schaef/jars/daikon.jar"
-    "http://www.csl.sri.com/users/schaef/jars/randoop.jar"
+    "https://github.com/randoop/randoop/releases/download/v3.0.0/randoop-all-3.0.0.jar"
     "https://www.dropbox.com/s/i1iqgf9w7jk1x3x/prog2dfg.jar"
     "https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar"
     "http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
@@ -18,10 +18,17 @@ JARS=(
 
 for jar in "${JARS[@]}"
 do
-    base=$(basename $jar)
-    echo Fetching $base
-    curl -L -o $base $jar &> /dev/null
+    base=$(basename ${jar})
+    echo Fetching ${base}
+    curl -L -o ${base} ${jar} &> /dev/null
+    if  [[ ${base} == randoop* ]] ;
+    then
+        echo Renaming ${base} to randoop.jar
+        mv ${base} "randoop.jar"
+    fi
 done
+
+# Rename randoop's release-specific-name to just randoop.jar
 
 # Unpack petablox
 unzip -o petablox.zip
