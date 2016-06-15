@@ -15,7 +15,9 @@ def add_project_to_corpus(project):
   text file named build_command.txt that contains the build command(s) for the
   project in this directory, and a clean_command.txt that will clean the project.
   """
+  print "STARTED CLEANING PROJECT"
   common.clean_project(project)
+  print "FINISHED CLEANING PROJECT"
 
   """Run dljc
   Run Randoop to generate test sources
@@ -33,7 +35,11 @@ def add_project_to_corpus(project):
 
   """ run graph kernel computation """
   project_dir = common.get_project_dir(project)
+  print "PROJECT DIR " + project_dir + " HERE"
   kernel_file_path = common.get_kernel_path(project)
+
+  print "KERNEL FILE " + kernel_file_path + " HERE"
+
   graph_kernel_cmd = ['python',
                       common.get_simprog('precompute_kernel.py'),
                       project_dir,

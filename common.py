@@ -94,7 +94,7 @@ def get_method_summary_from_dot_path(dot_path):
 
   method_sig = dot_to_method_dict[dot_name]
   source_file = method_to_source_dict[method_sig]
-  source_path = os.path.join("/", *(proj_dir + ["src", source_file]))
+  source_path = os.path.join("/", *(proj_dir + ["src/main", source_file]))
   new_method_sig = method_sig[1:-1]
   sig_arr = new_method_sig.split(' ')
   return source_path+"::"+sig_arr[2]+"::"+sig_arr[1]
