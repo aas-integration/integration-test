@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.smert</groupId>
+    <artifactId>jReactPhysics3D-Examples</artifactId>
+    <version>0.4.0</version>
+    <inceptionYear>2014</inceptionYear>
+    <packaging>jar</packaging>
+
+    <developers>
+        <developer>
+            <id>kovertopz</id>
+            <name>Jason Sorensen</name>
+            <email>sorensenj@smert.net</email>
+            <url>http://smert.net</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>zlib/libpng License</name>
+            <url>http://opensource.org/licenses/Zlib</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/kovertopz/jReactPhysics3D.git</connection>
+        <developerConnection>scm:git:git@github.com:kovertopz/jReactPhysics3D.git</developerConnection>
+        <url>https://github.com/kovertopz/jReactPhysics3D</url>
+    </scm>
+
+    <properties>
+        <junit.version>4.11</junit.version>
+        <licensemaven.version>2.6</licensemaven.version>
+        <lwjgl.version>2.9.3</lwjgl.version>
+        <mavencompiler.version>2.5.1</mavencompiler.version>
+        <mavenjavadoc.version>2.10.1</mavenjavadoc.version>
+        <mavennatives.version>0.0.7</mavennatives.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <slf4j.version>1.7.7</slf4j.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Framework-GL</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jReactPhysics3D</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl.lwjgl</groupId>
+            <artifactId>lwjgl</artifactId>
+            <version>${lwjgl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl.lwjgl</groupId>
+            <artifactId>lwjgl_util</artifactId>
+            <version>${lwjgl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${mavencompiler.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${licensemaven.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>LICENSE.txt</exclude>
+                        <exclude>nbactions*.xml</exclude>
+                        <exclude>nb-configuration.xml</exclude>
+                        <exclude>pom.xml</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                    </excludes>
+                    <header>HEADER.txt</header>
+                    <keywords>
+                        <keyword>Copyright (c) 2010-2013 Daniel Chappuis</keyword>
+                    </keywords>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                    <useDefaultExcludes>true</useDefaultExcludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.googlecode.mavennatives</groupId>
+                <artifactId>maven-nativedependencies-plugin</artifactId>
+                <version>${mavennatives.version}</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <!--suppress MavenModelInspection (this line is for IDEA)-->
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${mavenjavadoc.version}</version>
+                <configuration>
+                    <author>false</author>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>
