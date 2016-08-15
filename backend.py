@@ -86,8 +86,8 @@ def get_dtrace_file_for_project(project):
 
 def main():
   kf = open("corpus_kernel.txt", "w")
-  for project in ["JReactPhysics3D"]:
-  #for project in common.get_project_list():
+  #for project in ["JReactPhysics3D"]:
+  for project in common.get_project_list():
     print "Analyzing {}".format(project)
     project_kernel_file = add_project_to_corpus(project)
     with open(project_kernel_file, "r") as fi: kf.write(fi.read())
